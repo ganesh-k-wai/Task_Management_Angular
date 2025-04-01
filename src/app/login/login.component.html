@@ -1,0 +1,43 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card" style="width: 25rem;">
+        <div class="card-body">
+            <!-- Login Form -->
+            <div *ngIf="isLogin">
+                <h3 class="card-title text-center mb-4">Login</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="we" class="form-label">Name:</label>
+                        <input type="text" id="we" name="userName" class="form-control" [(ngModel)]="login.user_name"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pp" class="form-label">Password:</label>
+                        <input type="text" id="pp" name="userPassword" class="form-control"
+                            [(ngModel)]="login.user_password" required>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100" (click)="save_login()">Login</button>
+                </form>
+                <p class="text-center mt-3">Don't have an account? <a href="#" (click)="toggleForm()">Sign Up</a></p>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div *ngIf="!isLogin">
+                <h3 class="card-title text-center mb-4">Sign Up</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="ee" class="form-label">Name:</label>
+                        <input type="text" id="ee" name="signUpName" class="form-control" [(ngModel)]="signup.user_name"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="qq" class="form-label">Password:</label>
+                        <input type="text" id="qq" name="signUpPassword" class="form-control"
+                            [(ngModel)]="signup.user_password" required>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100" (click)="save_signUp()">Sign Up</button>
+                </form>
+                <p class="text-center mt-3">Already have an account? <a href="#" (click)="toggleForm()">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
