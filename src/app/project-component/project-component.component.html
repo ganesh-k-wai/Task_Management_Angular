@@ -3,12 +3,12 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" style="height: 50px;">
         <div class="container-fluid p-0">
             <a class="navbar-brand p-1" href="#">
-                <img src="tasklogo.png" alt="Logo" width="55" height="50" class="d-inline-block align-text-top">
-                <span class="p-1 mt-2">Task Management System</span>
+                <img src="tasklogo.png" alt="Logo" width="55" height="50" class="d-inline-block align-text-top ">
+                <span class="p-1 mt-2"></span>
             </a>
             <div class="d-flex">
                 <p class="my-2">Welcome {{ userName }}</p>
-                <a routerLink="/login">
+                <a>
                     <button class="btn btn-outline-secondary ms-2" (click)="logout()">
                         <i class="bi bi-box-arrow-right"></i> Logout
                     </button>
@@ -109,6 +109,7 @@
                     <table class="table table-striped table-bordered">
                         <thead class="thead-light">
                             <tr>
+                                <th>Sr.No</th>
                                 <th>Title</th>
                                 <th>Created By</th>
                                 <th>Project Manager</th>
@@ -123,7 +124,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let project of projects">
+                            <tr *ngFor="let project of projects let i=index">
+                                <td>{{ i+1}}</td>
                                 <td>{{ project.title }}</td>
                                 <td>{{ project.createdBy }}</td>
                                 <td>{{ project.projectManager }}</td>
