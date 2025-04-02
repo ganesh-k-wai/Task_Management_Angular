@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,6 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   errorMsg: string = 'Invalid Credential.!';
   successMsg: string = 'User Login Successful.';
-  signUparray: any[] = [];
   isLogin = true;
 
   login: any = {
@@ -25,23 +25,18 @@ export class LoginComponent {
     user_password: '',
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService) {}
 
   toggleForm() {
     this.isLogin = !this.isLogin;
   }
 
   save_login() {
-    const localdata = localStorage.getItem('signUp');
-    if (localdata !== null) {
-      this.signUparray = JSON.parse(localdata);
-    }
-    const isExistuser = this.signUparray.find(
-      (user: { user_name: string; user_password: string }) =>
-        user.user_name === this.login.user_name &&
-        user.user_password === this.login.user_password
+    const isLoggedIn = this.apiService.login(
+      this.login.user_name,
+      this.login.user_password
     );
-    if (isExistuser) {
+    if (isLoggedIn) {
       alert(this.successMsg);
       this.router.navigate(['/project-comp']);
     } else {
@@ -51,8 +46,7 @@ export class LoginComponent {
   }
 
   save_signUp() {
-    this.signUparray.push(this.signup);
-    localStorage.setItem('signUp', JSON.stringify(this.signUparray));
+    this.apiService.signUp(this.signup.user_name, this.signup.user_password);
     this.signup = { user_name: '', user_password: '' };
   }
 }
