@@ -1,1 +1,377 @@
-<p>task-component works!</p>
+<div class="container-fluid p-0">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" style="height: 50px;">
+        <div class="container-fluid p-0">
+            <a class="navbar-brand p-1" href="#">
+                <img src="tasklogo.png" alt="Logo" width="55" height="50" class="d-inline-block align-text-top">
+                <span class="p-1 mt-2"></span>
+            </a>
+            <div class="d-flex">
+                <p class="my-2">Welcome {{ userName }},</p>
+                <a>
+                    <button class="btn btn-outline-secondary ms-2 border-0" (click)="logout()">
+                        <i class="bi bi-power"></i> Logout
+                    </button>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project Details -->
+    <div class="container mt-4">
+
+        <!-- <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between">
+                <h5>{{ project.title }}</h5>
+
+                <div class="d-flex">
+                    <button class="btn btn-outline-warning border-0 px-2 py-1" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger border-0 ms-1 px-2 py-1" title="Delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <strong>Description:</strong>
+                            <p>{{ project.description }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Created By:</strong>
+                            <p>{{ project.createdBy }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Project Manager:</strong>
+                            <p>{{ project.projectManager }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <strong>Start Date:</strong>
+                            <p>{{ project.startDate }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>End Date:</strong>
+                            <p>{{ project.endDate }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Team Members:</strong>
+                            <p>{{ project.teamMembers }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- new one  -->
+
+
+        <!-- Project Details -->
+        <div class="container mt-4">
+            <div *ngIf="!isEditing" class="card mb-3">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <h6 class="mb-0">Project Name :</h6>
+                        <h6 class="mb-0 ms-2 fs-5">{{ project.title }}</h6>
+                    </div>
+
+                    <div class="d-flex">
+                        <button class="btn btn-outline-warning border-0 px-2 py-1" title="Edit" (click)="editProject()">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-outline-danger border-0 ms-1 px-2 py-1" title="Delete"
+                            (click)="confirmDelete()">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong>Description:</strong>
+                                <p>{{ project.description }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Created By:</strong>
+                                <p>{{ project.createdBy }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Project Manager:</strong>
+                                <p>{{ project.projectManager }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong>Start Date:</strong>
+                                <p>{{ project.startDate }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>End Date:</strong>
+                                <p>{{ project.endDate }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Team Members:</strong>
+                                <p>{{ project.teamMembers }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Project Form -->
+            <div *ngIf="isEditing" class="card mb-3">
+                <div class="card-header">
+                    <h5>Edit Project</h5>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="saveProject()">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="projectTitle">Project Title</label>
+                                <input type="text" id="projectTitle" [(ngModel)]="editedProject.title" name="title"
+                                    class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="projectManager">Project Manager</label>
+                                <input type="text" id="projectManager" [(ngModel)]="editedProject.projectManager"
+                                    name="projectManager" class="form-control" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="projectDescription">Project Description</label>
+                                <textarea id="projectDescription" [(ngModel)]="editedProject.description"
+                                    name="description" class="form-control" required></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="startDate">Start Date</label>
+                                <input type="date" id="startDate" [(ngModel)]="editedProject.startDate" name="startDate"
+                                    class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="endDate">End Date</label>
+                                <input type="date" id="endDate" [(ngModel)]="editedProject.endDate" name="endDate"
+                                    class="form-control" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="teamMembers">Team Members</label>
+                                <input type="text" id="teamMembers" [(ngModel)]="editedProject.teamMembers"
+                                    name="teamMembers" class="form-control" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Save</button>
+                        <button type="button" class="btn btn-outline-secondary ms-2"
+                            (click)="cancelEdit()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Task Form -->
+            <!-- <div class="card mb-3 shadow-sm">
+                <div class="card-header">
+                    <h5>Create Task</h5>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="addTask(taskForm)" #taskForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="taskTitle">Task Title</label>
+                                <input type="text" id="taskTitle" name="taskTitle" class="form-control" ngModel
+                                    required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="assignedTo">Assigned To</label>
+                                <input type="text" id="assignedTo" name="assignedTo" class="form-control" ngModel
+                                    required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="status">Task Status</label>
+                                <select id="status" name="taskStatus" class="form-control" ngModel required>
+                                    <option value="New">New</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="taskDescription">Task Description</label>
+                                <textarea id="taskDescription" name="taskDescription" class="form-control" ngModel
+                                    required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="estimate">Estimate (hours)</label>
+                                <input type="number" id="estimate" name="taskEstimate" class="form-control" ngModel
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="timeSpent">Time Spent (hours)</label>
+                                <input type="number" id="timeSpent" name="timeSpent" class="form-control" ngModel
+                                    required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Add Task</button>
+                    </form>
+                </div>
+            </div> -->
+
+
+            <!-- Create Task Form -->
+            <div *ngIf="!isEditingTask" class="card mb-3 shadow-sm">
+                <div class="card-header">
+                    <h5>Create Task</h5>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="addTask(taskForm)" #taskForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="taskTitle">Task Title</label>
+                                <input type="text" id="taskTitle" name="taskTitle" class="form-control" ngModel
+                                    required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="assignedTo">Assigned To</label>
+                                <input type="text" id="assignedTo" name="assignedTo" class="form-control" ngModel
+                                    required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="status">Task Status</label>
+                                <select id="status" name="taskStatus" class="form-control" ngModel required>
+                                    <option value="New">New</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="taskDescription">Task Description</label>
+                                <textarea id="taskDescription" name="taskDescription" class="form-control" ngModel
+                                    required></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="estimate">Estimate (hours)</label>
+                                <input type="number" id="estimate" name="taskEstimate" class="form-control" ngModel
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="timeSpent">Time Spent (hours)</label>
+                                <input type="number" id="timeSpent" name="timeSpent" class="form-control" ngModel
+                                    required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Add Task</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit Task Form -->
+            <div *ngIf="isEditingTask" class="card mb-3 shadow-sm">
+                <div class="card-header">
+                    <h5>Edit Task</h5>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="saveTask(taskForm)" #taskForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="taskTitle">Task Title</label>
+                                <input type="text" id="taskTitle" name="taskTitle" class="form-control"
+                                    [(ngModel)]="currentTask.title" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="assignedTo">Assigned To</label>
+                                <input type="text" id="assignedTo" name="assignedTo" class="form-control"
+                                    [(ngModel)]="currentTask.assignedTo" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="status">Task Status</label>
+                                <select id="status" name="taskStatus" class="form-control"
+                                    [(ngModel)]="currentTask.taskStatus" required>
+                                    <option value="New">New</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="taskDescription">Task Description</label>
+                                <textarea id="taskDescription" name="taskDescription" class="form-control"
+                                    [(ngModel)]="currentTask.description" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="estimate">Estimate (hours)</label>
+                                <input type="number" id="estimate" name="taskEstimate" class="form-control"
+                                    [(ngModel)]="currentTask.taskEstimate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="timeSpent">Time Spent (hours)</label>
+                                <input type="number" id="timeSpent" name="timeSpent" class="form-control"
+                                    [(ngModel)]="currentTask.timeSpent" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Save Task</button>
+                        <button type="button" class="btn btn-outline-secondary ms-2"
+                            (click)="cancelEditTask()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Task List -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Task List</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Sr.No</th>
+                                <th>Action</th>
+                                <th>Task Title</th>
+                                <th>Assigned To</th>
+                                <th>Status</th>
+                                <th>Estimate (hrs)</th>
+                                <th>Time Spent (hrs)</th>
+                                <th>Task Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let task of tasks let i=index" class="text-center">
+                                <td>{{ i+1 }}</td>
+                                <td>
+                                    <button class="btn btn-outline-warning border-0 px-2 py-1" title="Edit"
+                                        (click)="editTask(task)">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger border-0 ms-1 px-2 py-1" title="Delete"
+                                        (click)="deleteTask(task.task_id)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.assignedTo }}</td>
+                                <td>{{ task.taskStatus }}</td>
+                                <td>{{ task.taskEstimate }}</td>
+                                <td>{{ task.timeSpent }}</td>
+                                <td>{{ task.description }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+    </div>

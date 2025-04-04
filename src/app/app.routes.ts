@@ -7,6 +7,6 @@ import { TaskListComponentComponent } from './task-list-component/task-list-comp
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'project-comp', component: ProjectComponentComponent },
-  { path: 'task-comp', component: TaskComponentComponent },
+  { path: 'task-comp/:project_Id', component: TaskComponentComponent },
   { path: 'task-list', component: TaskListComponentComponent },
 ];

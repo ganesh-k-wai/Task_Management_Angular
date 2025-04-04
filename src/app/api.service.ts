@@ -30,6 +30,13 @@ export class ApiService {
     this.signUparray.push({ user_name, user_password });
     localStorage.setItem('signUp', JSON.stringify(this.signUparray));
   }
+  getCurrentUser(): any {
+    return JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+  }
+  logout(): void {
+    localStorage.removeItem('loggedInUser');
+  }
+  // --------------------
 
   addProject(project: any): void {
     let projects = JSON.parse(localStorage.getItem('projects') || '[]');
@@ -39,5 +46,78 @@ export class ApiService {
 
   getProjects(): any[] {
     return JSON.parse(localStorage.getItem('projects') || '[]');
+  }
+  // ...
+  getProjectById(projectId: string): any {
+    const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+    return projects.find(
+      (project: { project_Id: string }) => project.project_Id === projectId
+    );
+  }
+
+  getTasksByProjectId(projectId: string): any[] {
+    const project = this.getProjectById(projectId);
+    return project ? project.tasks || [] : [];
+  }
+
+  addTask(projectId: string, task: any): void {
+    const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+    const projectIndex = projects.findIndex(
+      (project: { project_Id: string }) => project.project_Id === projectId
+    );
+    if (projectIndex !== -1) {
+      projects[projectIndex].tasks = projects[projectIndex].tasks || [];
+      projects[projectIndex].tasks.push(task);
+      localStorage.setItem('projects', JSON.stringify(projects));
+    }
+  }
+
+  updateProject(projectId: string, updatedProject: any): void {
+    let projects = JSON.parse(localStorage.getItem('projects') || '[]');
+    const projectIndex = projects.findIndex(
+      (project: { project_Id: string }) => project.project_Id === projectId
+    );
+    if (projectIndex !== -1) {
+      projects[projectIndex] = { ...projects[projectIndex], ...updatedProject };
+      localStorage.setItem('projects', JSON.stringify(projects));
+    }
+  }
+
+  deleteProject(projectId: string): void {
+    let projects = JSON.parse(localStorage.getItem('projects') || '[]');
+    projects = projects.filter(
+      (project: { project_Id: string }) => project.project_Id !== projectId
+    );
+    localStorage.setItem('projects', JSON.stringify(projects));
+  }
+
+  // ---------task-----------
+  updateTask(projectId: string, updatedTask: any): void {
+    const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+    const projectIndex = projects.findIndex(
+      (project: { project_Id: string }) => project.project_Id === projectId
+    );
+    if (projectIndex !== -1) {
+      const taskIndex = projects[projectIndex].tasks.findIndex(
+        (task: { task_id: string }) => task.task_id === updatedTask.task_id
+      );
+      if (taskIndex !== -1) {
+        projects[projectIndex].tasks[taskIndex] = updatedTask;
+        localStorage.setItem('projects', JSON.stringify(projects));
+      }
+    }
+  }
+
+  deleteTask(projectId: string, taskId: string): void {
+    const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+    const projectIndex = projects.findIndex(
+      (project: { project_Id: string }) => project.project_Id === projectId
+    );
+    if (projectIndex !== -1) {
+      projects[projectIndex].tasks = projects[projectIndex].tasks.filter(
+        (task: { task_id: string }) => task.task_id !== taskId
+      );
+      localStorage.setItem('projects', JSON.stringify(projects));
+    }
   }
 }

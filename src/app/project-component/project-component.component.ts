@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { ApiService } from '../api.service';
+import { v4 as uuidv4 } from 'uuid';
+import flatpickr from 'flatpickr';
+import { Options } from 'flatpickr/dist/types/options';
 
 @Component({
   selector: 'app-project-component',
@@ -14,6 +17,7 @@ import { ApiService } from '../api.service';
 })
 export class ProjectComponentComponent implements OnInit {
   project = {
+    project_Id: '',
     title: '',
     description: '',
     createdBy: '',
@@ -22,7 +26,7 @@ export class ProjectComponentComponent implements OnInit {
     endDate: '',
     teamMembers: '',
     dueDate: '',
-    status: 'Pending',
+    status: '',
     assignedTo: '',
     estimate: '',
     timeSpent: '',
@@ -58,12 +62,12 @@ export class ProjectComponentComponent implements OnInit {
 
   onSubmit() {
     console.log('Project Created:', this.project);
-    // Store project using ApiService
+    this.project.project_Id = this.generateUniqueId();
+
     this.apiService.addProject(this.project);
-    // Reload projects
     this.loadProjects();
-    // Reset the form
     this.project = {
+      project_Id: '',
       title: '',
       description: '',
       createdBy: '',
@@ -72,7 +76,7 @@ export class ProjectComponentComponent implements OnInit {
       endDate: '',
       teamMembers: '',
       dueDate: '',
-      status: 'Pending',
+      status: '',
       assignedTo: '',
       estimate: '',
       timeSpent: '',
@@ -82,5 +86,58 @@ export class ProjectComponentComponent implements OnInit {
   logout() {
     this.userService.logout();
     this.router.navigate(['/']);
+  }
+  generateUniqueId(): string {
+    return uuidv4();
+  }
+
+  navigateToTaskComponent(project: any) {
+    this.router.navigate(['/task-comp', project.project_Id]);
+  }
+
+  ngAfterViewInit() {
+    this.initializeDatePickers();
+  }
+
+  initializeDatePickers(): void {
+    const startDateInput = document.getElementById(
+      'startDate'
+    ) as HTMLInputElement;
+    const dueDateInput = document.getElementById('dueDate') as HTMLInputElement;
+    const reminderDateInput = document.getElementById(
+      'reminderDate'
+    ) as HTMLInputElement;
+    const today = new Date().toISOString().split('T')[0];
+
+    const startDatePicker = flatpickr(startDateInput, {
+      dateFormat: 'd-M-Y',
+      minDate: today,
+      onChange: (selectedDates) => {
+        const startDate = selectedDates[0];
+        if (startDate) {
+          dueDatePicker.set('minDate', startDate);
+          reminderDatePicker.set('minDate', startDate);
+        }
+      },
+    });
+
+    const dueDatePicker = flatpickr(dueDateInput, {
+      dateFormat: 'd-M-Y',
+      minDate: today,
+      onChange: (selectedDates) => {
+        const dueDate = selectedDates[0];
+        if (dueDate) {
+          reminderDatePicker.set('maxDate', dueDate);
+        }
+      },
+    });
+
+    const reminderDatePicker = flatpickr(reminderDateInput, {
+      dateFormat: 'd-M-Y H:i',
+      enableTime: true,
+      noCalendar: false,
+      time_24hr: true,
+      minuteIncrement: 1,
+    });
   }
 }
