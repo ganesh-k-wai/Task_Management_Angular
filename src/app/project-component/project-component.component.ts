@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { ApiService } from '../api.service';
 import { v4 as uuidv4 } from 'uuid';
-import flatpickr from 'flatpickr';
-import { Options } from 'flatpickr/dist/types/options';
 
 @Component({
   selector: 'app-project-component',
@@ -15,26 +13,40 @@ import { Options } from 'flatpickr/dist/types/options';
   templateUrl: './project-component.component.html',
   styleUrls: ['./project-component.component.css'],
 })
-export class ProjectComponentComponent implements OnInit {
-  project = {
+export class ProjectComponentComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
+  projects: any[] = [];
+  userName: string | null = '';
+  daysRemaining: number = 0;
+  intervalId: any;
+  teamMembers: string[] = [
+    'Piyush',
+    'Ayush',
+    'Ganesh',
+    'Om',
+    'Harsh',
+    'Tejas',
+    'Kalyan',
+    'Rushi',
+    'Shubham',
+  ];
+
+  project: any = {
     project_Id: '',
     title: '',
     description: '',
-    createdBy: '',
+    createdBy: this.userName,
     projectManager: '',
     startDate: '',
     endDate: '',
-    teamMembers: '',
+    teamMembers: [],
     dueDate: '',
-    status: '',
+    status: 'New',
     assignedTo: '',
     estimate: '',
     timeSpent: '',
   };
-
-  projects: any[] = [];
-
-  userName: string | null = '';
 
   constructor(
     private router: Router,
@@ -45,10 +57,21 @@ export class ProjectComponentComponent implements OnInit {
   ngOnInit() {
     this.getUserName();
     this.loadProjects();
+    this.startLiveDaysRemaining();
+    console.log(this.daysRemaining);
+    console.log(typeof this.daysRemaining);
   }
 
+  // getUserName() {
+  //   const currentUser = this.userService.getCurrentUser();
+  //   if (currentUser && currentUser.user_name) {
+  //     this.userName = currentUser.user_name;
+  //   } else {
+  //     this.userName = 'User';
+  //   }
+  // }
   getUserName() {
-    const currentUser = this.userService.getCurrentUser();
+    const currentUser = this.apiService.getCurrentUser();
     if (currentUser && currentUser.user_name) {
       this.userName = currentUser.user_name;
     } else {
@@ -63,20 +86,20 @@ export class ProjectComponentComponent implements OnInit {
   onSubmit() {
     console.log('Project Created:', this.project);
     this.project.project_Id = this.generateUniqueId();
-
+    this.project.createdBy = this.userName;
     this.apiService.addProject(this.project);
     this.loadProjects();
     this.project = {
       project_Id: '',
       title: '',
       description: '',
-      createdBy: '',
+      createdBy: this.userName,
       projectManager: '',
       startDate: '',
       endDate: '',
-      teamMembers: '',
+      teamMembers: [],
       dueDate: '',
-      status: '',
+      status: 'New',
       assignedTo: '',
       estimate: '',
       timeSpent: '',
@@ -95,49 +118,73 @@ export class ProjectComponentComponent implements OnInit {
     this.router.navigate(['/task-comp', project.project_Id]);
   }
 
+  // date
+
   ngAfterViewInit() {
-    this.initializeDatePickers();
+    this.initializeDateInputs();
   }
 
-  initializeDatePickers(): void {
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  initializeDateInputs(): void {
     const startDateInput = document.getElementById(
       'startDate'
     ) as HTMLInputElement;
-    const dueDateInput = document.getElementById('dueDate') as HTMLInputElement;
-    const reminderDateInput = document.getElementById(
-      'reminderDate'
-    ) as HTMLInputElement;
-    const today = new Date().toISOString().split('T')[0];
+    const endDateInput = document.getElementById('endDate') as HTMLInputElement;
 
-    const startDatePicker = flatpickr(startDateInput, {
-      dateFormat: 'd-M-Y',
-      minDate: today,
-      onChange: (selectedDates) => {
-        const startDate = selectedDates[0];
-        if (startDate) {
-          dueDatePicker.set('minDate', startDate);
-          reminderDatePicker.set('minDate', startDate);
-        }
-      },
+    startDateInput.addEventListener('change', () => {
+      const startDate = new Date(startDateInput.value);
+      if (startDate) {
+        endDateInput.min = startDateInput.value;
+        this.calculateDueInDays(startDate, new Date(endDateInput.value));
+      }
     });
 
-    const dueDatePicker = flatpickr(dueDateInput, {
-      dateFormat: 'd-M-Y',
-      minDate: today,
-      onChange: (selectedDates) => {
-        const dueDate = selectedDates[0];
-        if (dueDate) {
-          reminderDatePicker.set('maxDate', dueDate);
-        }
-      },
+    endDateInput.addEventListener('change', () => {
+      const startDate = new Date(startDateInput.value);
+      const endDate = new Date(endDateInput.value);
+      if (endDate) {
+        this.calculateDueInDays(startDate, endDate);
+        this.updateDaysRemaining();
+      }
     });
+  }
 
-    const reminderDatePicker = flatpickr(reminderDateInput, {
-      dateFormat: 'd-M-Y H:i',
-      enableTime: true,
-      noCalendar: false,
-      time_24hr: true,
-      minuteIncrement: 1,
-    });
+  calculateDueInDays(startDate: Date, endDate: Date): void {
+    const diffInMs = endDate.getTime() - startDate.getTime();
+    const diffInDays: any = diffInMs / (1000 * 60 * 60 * 24);
+    this.project.dueDate = diffInDays;
+  }
+
+  updateDaysRemaining(): void {
+    if (this.project.endDate) {
+      const endDate = new Date(this.project.endDate);
+      const today = new Date();
+      const diffInMs = endDate.getTime() - today.getTime();
+      this.daysRemaining = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+    }
+  }
+
+  startLiveDaysRemaining(): void {
+    this.updateDaysRemaining();
+    this.intervalId = setInterval(() => {
+      this.updateDaysRemaining();
+    }, 1000 * 60 * 60 * 24); // Update every day
+  }
+
+  onCheckboxChange(event: any) {
+    const member = event.target.value;
+    if (event.target.checked) {
+      this.project.teamMembers.push(member);
+    } else {
+      const index = this.project.teamMembers.indexOf(member);
+      if (index > -1) {
+        this.project.teamMembers.splice(index, 1);
+      }
+    }
   }
 }

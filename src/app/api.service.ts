@@ -40,7 +40,7 @@ export class ApiService {
 
   addProject(project: any): void {
     let projects = JSON.parse(localStorage.getItem('projects') || '[]');
-    projects.push(project);
+    projects.unshift(project);
     localStorage.setItem('projects', JSON.stringify(projects));
   }
 

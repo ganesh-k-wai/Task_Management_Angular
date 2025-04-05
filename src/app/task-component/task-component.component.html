@@ -1,6 +1,6 @@
 <div class="container-fluid p-0">
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" style="height: 50px;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="height: 50px;">
         <div class="container-fluid p-0">
             <a class="navbar-brand p-1" href="#">
                 <img src="tasklogo.png" alt="Logo" width="55" height="50" class="d-inline-block align-text-top">
@@ -18,7 +18,7 @@
     </nav>
 
     <!-- Project Details -->
-    <div class="container mt-4">
+    <div class="container " style="margin-top: 77px;">
 
         <!-- <div class="card mb-3">
             <div class="card-header d-flex justify-content-between">
@@ -70,9 +70,9 @@
 
         <!-- new one  -->
 
-
         <!-- Project Details -->
-        <div class="container mt-4">
+        <div class="container mt-3">
+            <h5>Project Details:</h5>
             <div *ngIf="!isEditing" class="card mb-3">
                 <div class="card-header d-flex justify-content-between">
                     <div class="d-flex align-items-center">
@@ -92,25 +92,29 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <strong>Description:</strong>
-                                <p>{{ project.description }}</p>
+                                <p [title]="project.description">{{ project.description }}</p>
                             </div>
                             <div class="mb-3">
                                 <strong>Created By:</strong>
                                 <p>{{ project.createdBy }}</p>
                             </div>
+
+                        </div>
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <strong>Project Manager:</strong>
                                 <p>{{ project.projectManager }}</p>
                             </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="mb-3">
                                 <strong>Start Date:</strong>
                                 <p>{{ project.startDate }}</p>
                             </div>
+                        </div>
+                        <div class="col-md-4">
+
                             <div class="mb-3">
                                 <strong>End Date:</strong>
                                 <p>{{ project.endDate }}</p>
@@ -360,7 +364,7 @@
                                 <td>{{ task.taskStatus }}</td>
                                 <td>{{ task.taskEstimate }}</td>
                                 <td>{{ task.timeSpent }}</td>
-                                <td>{{ task.description }}</td>
+                                <td class="text-truncate" [title]="task.description">{{ task.description }}</td>
                             </tr>
                         </tbody>
                     </table>

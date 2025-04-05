@@ -23,3 +23,4 @@
 .footer .text-muted {
   font-size: 14px;
 }
+@import "~flatpickr/dist/flatpickr.min.css";
