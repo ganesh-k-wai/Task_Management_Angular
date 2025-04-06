@@ -12,7 +12,17 @@ export class ApiService {
       this.signUparray = JSON.parse(localdata);
     }
   }
-
+  teamMembers: string[] = [
+    'Piyush',
+    'Ayush',
+    'Ganesh',
+    'Om',
+    'Harsh',
+    'Tejas',
+    'Kalyan',
+    'Rushi',
+    'Shubham',
+  ];
   login(user_name: string, user_password: string): boolean {
     const isExistuser = this.signUparray.find(
       (user: { user_name: string; user_password: string }) =>
@@ -67,7 +77,7 @@ export class ApiService {
     );
     if (projectIndex !== -1) {
       projects[projectIndex].tasks = projects[projectIndex].tasks || [];
-      projects[projectIndex].tasks.push(task);
+      projects[projectIndex].tasks.unshift(task);
       localStorage.setItem('projects', JSON.stringify(projects));
     }
   }

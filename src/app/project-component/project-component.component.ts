@@ -5,11 +5,12 @@ import { RouterModule, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { ApiService } from '../api.service';
 import { v4 as uuidv4 } from 'uuid';
+import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationModule
 
 @Component({
   selector: 'app-project-component',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule,NgxPaginationModule],
   templateUrl: './project-component.component.html',
   styleUrls: ['./project-component.component.css'],
 })
@@ -20,6 +21,18 @@ export class ProjectComponentComponent
   userName: string | null = '';
   daysRemaining: number = 0;
   intervalId: any;
+  filteredProjects: any[] = [];
+
+    // For pagination
+    page: number = 1;
+    itemsPerPage: number = 3;
+    totalItems: number = 0;
+  
+    // For searching and sorting
+    searchQuery: string = '';
+    sortColumn: string = '';
+    sortDirection: string = 'asc';
+
   teamMembers: string[] = [
     'Piyush',
     'Ayush',
@@ -42,16 +55,18 @@ export class ProjectComponentComponent
     endDate: '',
     teamMembers: [],
     dueDate: '',
-    status: 'New',
+    status: 'High',
     assignedTo: '',
     estimate: '',
     timeSpent: '',
   };
+  
+
 
   constructor(
     private router: Router,
     private userService: UserService,
-    private apiService: ApiService
+    public apiService: ApiService
   ) {}
 
   ngOnInit() {
@@ -61,7 +76,7 @@ export class ProjectComponentComponent
     console.log(this.daysRemaining);
     console.log(typeof this.daysRemaining);
   }
-
+  
   // getUserName() {
   //   const currentUser = this.userService.getCurrentUser();
   //   if (currentUser && currentUser.user_name) {
@@ -81,6 +96,8 @@ export class ProjectComponentComponent
 
   loadProjects() {
     this.projects = this.apiService.getProjects();
+    this.applyFilters();
+
   }
 
   onSubmit() {
@@ -99,7 +116,7 @@ export class ProjectComponentComponent
       endDate: '',
       teamMembers: [],
       dueDate: '',
-      status: 'New',
+      status: 'High',
       assignedTo: '',
       estimate: '',
       timeSpent: '',
@@ -135,6 +152,8 @@ export class ProjectComponentComponent
       'startDate'
     ) as HTMLInputElement;
     const endDateInput = document.getElementById('endDate') as HTMLInputElement;
+
+    
 
     startDateInput.addEventListener('change', () => {
       const startDate = new Date(startDateInput.value);
@@ -187,4 +206,67 @@ export class ProjectComponentComponent
       }
     }
   }
+
+  // search, sort,pagination 
+
+  
+  // Pagination logic
+  onPageChange(page: number) {
+    this.page = page;
+    this.applyFilters();
+  }
+
+  // Searching and sorting logic
+  onSearchChange() {
+    this.applyFilters();
+  }
+
+  onSortChange(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilters();
+  }
+
+  private applyFilters() {
+    let filteredProjects = this.projects;
+
+    // Searching
+    if (this.searchQuery) {
+      filteredProjects = filteredProjects.filter(project =>
+        project.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        project.createdBy.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        project.projectManager.toLowerCase().includes(this.searchQuery.toLowerCase())||
+        project.status.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        project.teamMembers.some((member: string) =>
+          member.toLowerCase().includes(this.searchQuery.toLowerCase())
+        )
+      );
+    }
+
+    // Sorting
+    if (this.sortColumn) {
+      filteredProjects.sort((a, b) => {
+        const valueA = a[this.sortColumn];
+        const valueB = b[this.sortColumn];
+        if (valueA < valueB) {
+          return this.sortDirection === 'asc' ? -1 : 1;
+        } else if (valueA > valueB) {
+          return this.sortDirection === 'asc' ? 1 : -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+    // Pagination
+    this.totalItems = filteredProjects.length;
+    const startIndex = (this.page - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.filteredProjects = filteredProjects.slice(startIndex, endIndex);
+  }
+
 }

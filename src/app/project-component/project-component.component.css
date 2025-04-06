@@ -23,4 +23,9 @@
 .footer .text-muted {
   font-size: 14px;
 }
+
+.projectsearchBox:focus{
+  box-shadow: none !important;
+  border-color: #dad4ce !important; 
+}
 @import "~flatpickr/dist/flatpickr.min.css";
