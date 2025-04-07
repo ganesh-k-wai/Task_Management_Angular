@@ -13,34 +13,18 @@ import { NgForm } from '@angular/forms';
   templateUrl: './task-component.component.html',
   styleUrls: ['./task-component.component.css'],
 })
-export class TaskComponentComponent implements OnInit   {
+export class TaskComponentComponent implements OnInit {
   projectId!: string;
   project: any;
   tasks: any[] = [];
   userName: string = '';
   isEditing: boolean = false;
   editedProject: any = {};
-  // ...
-  isEditingTask: boolean = false;
-  currentTask: any = {};
-  daysRemaining: number = 0;
-  intervalId: any;
-  teamMembers: any[] = [];
-  selectedTeamMembers: any[] = [];
-
-  selectedTaskTeamMembers: any[] = [];
-
-//   projectList: any[] = [];  
-// projectTeamMembers: any[] = []; 
-// selectedProjectId: any; 
-
-selectedTaskMembers: string[] = []; // Team Members selected for task
 
   constructor(
     private route: ActivatedRoute,
     public apiService: ApiService,
-    private router: Router,
-    // private toastr: ToastrService
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,40 +32,14 @@ selectedTaskMembers: string[] = []; // Team Members selected for task
     this.loadProjectDetails();
     this.loadTasks();
     this.loadCurrentUser();
-
+    console.log();
   }
 
   loadProjectDetails() {
     this.project = this.apiService.getProjectById(this.projectId);
-    this.editedProject = { ...this.project }; //optionally
+    this.editedProject = { ...this.project };
     this.selectedTeamMembers = this.project.teamMembers || [];
     this.teamMembers = this.project.teamMembers || [];
-
-    // console.log('pro details:', this.project);
-  }
-
-  addTask(taskForm: any) {
-    const task = {
-      task_id: this.generateUniqueId(),
-      title: taskForm.value.taskTitle,
-      assignedTo: [...this.selectedTaskMembers],
-      taskStatus: taskForm.value.taskStatus || 'New',
-      taskEstimate: taskForm.value.taskEstimate,
-      timeSpent: taskForm.value.timeSpent,
-      description: taskForm.value.taskDescription,
-    };
-    this.apiService.addTask(this.projectId, task);
-    console.log(task);
-    console.log(this.projectId);
-
-    this.loadTasks();
-    taskForm.reset();
-    this.selectedTaskMembers = [];
-  
-  }
-
-  loadTasks() {
-    this.tasks = this.apiService.getTasksByProjectId(this.projectId);
   }
 
   generateUniqueId(): string {
@@ -111,7 +69,6 @@ selectedTaskMembers: string[] = []; // Team Members selected for task
   cancelEdit() {
     this.isEditing = false;
     this.editedProject = { ...this.project };
-
   }
 
   deleteProject() {
@@ -120,17 +77,49 @@ selectedTaskMembers: string[] = []; // Team Members selected for task
   }
 
   saveProject() {
-    
     this.apiService.updateProject(this.projectId, this.editedProject);
     console.log(this.editProject);
-    
+
     this.isEditing = false;
     this.loadProjectDetails();
-
-    
   }
 
   // -------------task
+
+  isEditingTask: boolean = false;
+  currentTask: any = {}; // it shows current task values in edit task
+  daysRemaining: number = 0;
+  intervalId: any;
+  teamMembers: any[] = []; // project team member of that perticular Id
+  selectedTeamMembers: any[] = [];
+
+  selectedTaskTeamMembers: any[] = []; //create task assignedto value stores
+
+  selectedTaskMembers: string[] = [];
+
+  infinityValue: number = Infinity; // est & spend time
+
+  addTask(taskForm: any) {
+    const task = {
+      task_id: this.generateUniqueId(),
+      title: taskForm.value.taskTitle,
+      assignedTo: [...this.selectedTaskTeamMembers],
+      taskStatus: taskForm.value.taskStatus || 'New',
+      taskEstimate: taskForm.value.taskEstimate,
+      timeSpent: taskForm.value.timeSpent,
+      description: taskForm.value.taskDescription,
+    };
+    this.apiService.addTask(this.projectId, task);
+
+    this.loadTasks();
+    taskForm.reset();
+    this.selectedTaskMembers = [];
+    console.log(this.selectedTaskMembers);
+  }
+
+  loadTasks() {
+    this.tasks = this.apiService.getTasksByProjectId(this.projectId);
+  }
 
   saveTask(taskForm: any) {
     const updatedTask = {
@@ -145,19 +134,18 @@ selectedTaskMembers: string[] = []; // Team Members selected for task
     this.apiService.updateTask(this.projectId, updatedTask);
     this.isEditingTask = false;
     this.loadTasks();
-    this.selectedTaskTeamMembers = []; 
+    this.selectedTaskTeamMembers = [];
   }
 
   cancelEditTask() {
     this.isEditingTask = false;
     this.currentTask = {};
-    this.selectedTaskTeamMembers = []; 
-
+    this.selectedTaskTeamMembers = [];
   }
   editTask(task: any) {
     this.isEditingTask = true;
-  this.selectedTaskMembers = [...task.assignedTo];
-
+    this.currentTask = { ...task };
+    this.selectedTaskMembers = [...task.assignedTo];
   }
   deleteTask(taskId: string) {
     const confirmed = window.confirm('Are you sure ?');
@@ -182,9 +170,8 @@ selectedTaskMembers: string[] = []; // Team Members selected for task
   }
 
   onTaskMemberChange(event: any) {
-    debugger
     const member = event.target.value;
-    console.log('Selected member:', member);
+    // console.log('Selected member:', member);
     console.log('Selected members:', this.selectedTaskTeamMembers);
     if (event.target.checked) {
       if (!this.selectedTaskTeamMembers.includes(member)) {
@@ -198,36 +185,37 @@ selectedTaskMembers: string[] = []; // Team Members selected for task
     }
   }
 
+  // date
 
+  calculateDueDays() {
+    if (this.editedProject.startDate && this.editedProject.endDate) {
+      const start = new Date(this.editedProject.startDate);
+      const end = new Date(this.editedProject.endDate);
+      const diffTime = Math.abs(end.getTime() - start.getTime());
+      this.editedProject.dueDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // days
+    }
+  }
 
-    // date
- 
-  
-    calculateDueDays() {
-      if (this.editedProject.startDate && this.editedProject.endDate) {
-        const start = new Date(this.editedProject.startDate);
-        const end = new Date(this.editedProject.endDate);
-        const diffTime = Math.abs(end.getTime() - start.getTime());
-        this.editedProject.dueDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // days
-      }
+  onStartDateChange() {
+    if (
+      this.editedProject.endDate &&
+      new Date(this.editedProject.startDate) >
+        new Date(this.editedProject.endDate)
+    ) {
+      alert('Start Date cannot be after End Date');
+      this.editedProject.endDate = null;
     }
-    
-    onStartDateChange() {
-      if (this.editedProject.endDate && new Date(this.editedProject.startDate) > new Date(this.editedProject.endDate)) {
-        alert('Start Date cannot be after End Date');
-        this.editedProject.endDate = null;
-      }
-      this.calculateDueDays(); // optional for auto calculate
-    }
-    
-    onEndDateChange() {
-      if (new Date(this.editedProject.endDate) < new Date(this.editedProject.startDate)) {
-        alert('End Date cannot be before Start Date');
-        this.editedProject.endDate = null;
-      }
-      this.calculateDueDays(); // optional for auto calculate
-    }
-    
+    this.calculateDueDays(); // optional for auto calculate
+  }
 
-    
+  onEndDateChange() {
+    if (
+      new Date(this.editedProject.endDate) <
+      new Date(this.editedProject.startDate)
+    ) {
+      alert('End Date cannot be before Start Date');
+      this.editedProject.endDate = null;
+    }
+    this.calculateDueDays(); // optional for auto calculate
+  }
 }

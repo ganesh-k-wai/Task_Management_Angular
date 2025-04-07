@@ -72,6 +72,7 @@ export class ApiService {
 
   addTask(projectId: string, task: any): void {
     const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+
     const projectIndex = projects.findIndex(
       (project: { project_Id: string }) => project.project_Id === projectId
     );
