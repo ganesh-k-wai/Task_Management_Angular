@@ -406,8 +406,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="estimate">Estimate (hours)</label>
                                 <input type="number" id="estimate" name="taskEstimate" class="form-control"
-                                    [(ngModel)]="currentTask.taskEstimate" required #taskEstimate="ngModel"
-                                    [min]="currentTask.timeSpent">
+                                    [(ngModel)]="currentTask.taskEstimate" required #taskEstimate="ngModel">
                                 <div *ngIf="taskEstimate.invalid && taskEstimate.touched" class="text-danger">
                                     * Estimate Greater than Time Spent
                                 </div>
@@ -428,7 +427,56 @@
                     </form>
                 </div>
             </div>
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Search Box -->
+                    <div class="pb-1 d-flex align-items-center">
+                        <div class="input-group w-100">
+                            <input type="search" class="form-control tasksearchBox border-end-0" placeholder="Search..."
+                                [(ngModel)]="searchQuery" (input)="onTaskSearchChange()" aria-label="Search">
+                            <button class="btn border border-grey border-start-0" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
 
+                    <!-- Sort Button -->
+                    <!-- Sort Dropdown -->
+                    <!-- Updated Sort Dropdown -->
+                    <div class="dropdown pb-1">
+                        <button class="btn dropdown-toggle border border-grey btn-sm" type="button" id="sortDropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-funnel"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                            <li style="cursor: pointer;">
+                                <a class="dropdown-item" (click)="onTaskSortChange('title')">
+                                    Title
+                                    <span *ngIf="sortColumn === 'title'">
+                                        ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
+                                    </span>
+                                </a>
+                            </li>
+                            <li style="cursor: pointer;">
+                                <a class="dropdown-item" (click)="onTaskSortChange('assignedTo')">
+                                    Assigned To
+                                    <span *ngIf="sortColumn === 'assignedTo'">
+                                        ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
+                                    </span>
+                                </a>
+                            </li>
+                            <li style="cursor: pointer;">
+                                <a class="dropdown-item" (click)="onTaskSortChange('taskStatus')">
+                                    Status
+                                    <span *ngIf="sortColumn === 'taskStatus'">
+                                        ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <!-- Task List -->
             <div class="card mb-3">
                 <div class="card-header">
@@ -450,7 +498,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let task of tasks let i=index" class="text-center">
+                                <tr *ngFor="let task of filteredTasks let i=index" class="text-center">
                                     <td>{{ i+1 }}</td>
                                     <td>
                                         <button class="btn btn-outline-warning border-0 px-2 py-1" title="Edit"
@@ -471,6 +519,39 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <div class="d-flex justify-content-between align-items-center pb-1">
+                    <!-- Items Per Page Dropdown -->
+                    <div class="d-flex align-items-center">
+                        <select id="itemsPerPage" class="form-select fs-6 " style="min-width: 20px"
+                            (change)="onTaskItemsPerPageChange($event)">
+                            <option value="" selected disabled></option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+
+                    <!-- Pagination Controls -->
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="text-muted">Page {{ page }} of {{ totalPages() }}</span>
+                        <span class="text-muted">({{ tasks.length }} item{{ tasks.length !== 1 ? 's' : '' }})</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm px-2" type="button" (click)="onTaskPageChange(page - 1)"
+                                [disabled]="page === 1">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-sm px-2" type="button">{{ page }}</button>
+                            <span class="mx-2">of {{ totalPages() }}</span>
+                            <button class="btn btn-sm px-2" type="button" (click)="onTaskPageChange(page + 1)"
+                                [disabled]="page === totalPages()">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

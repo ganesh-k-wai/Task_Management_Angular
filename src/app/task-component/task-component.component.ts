@@ -21,6 +21,19 @@ export class TaskComponentComponent implements OnInit {
   isEditing: boolean = false;
   editedProject: any = {};
 
+  filteredTasks: any[] = [];
+
+  // For pagination
+  page: number = 1;
+  itemsPerPage: number = 1;
+  totalItems: number = 0;
+
+  // For searching and sorting
+  searchQuery: string = '';
+  sortColumn: string = '';
+  sortDirection: string = 'asc';
+  // selectedTaskTeamMembers: string[] = [];
+
   constructor(
     private route: ActivatedRoute,
     public apiService: ApiService,
@@ -119,6 +132,7 @@ export class TaskComponentComponent implements OnInit {
 
   loadTasks() {
     this.tasks = this.apiService.getTasksByProjectId(this.projectId);
+    this.applyTaskFilters();
   }
 
   saveTask(taskForm: any) {
@@ -217,5 +231,99 @@ export class TaskComponentComponent implements OnInit {
       this.editedProject.endDate = null;
     }
     this.calculateDueDays(); // optional for auto calculate
+  }
+
+  // -------searching sort----------
+
+  // search, sort, pagination
+
+  onTaskPageChange(page: number) {
+    this.page = page;
+    this.applyTaskFilters();
+  }
+
+  onTaskItemsPerPageChange(event: any) {
+    this.itemsPerPage = parseInt(event.target.value, 10);
+    this.page = 1; // Reset to first page
+    this.applyTaskFilters();
+  }
+
+  onTaskSearchChange() {
+    this.page = 1; // Reset to first page
+    this.applyTaskFilters();
+  }
+  totalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  onTaskSortChange(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.applyTaskFilters();
+  }
+
+  private applyTaskFilters() {
+    let filteredTasks = [...this.tasks]; // Clone the tasks array to avoid mutating the original
+
+    // Searching
+    if (this.searchQuery) {
+      const query = this.searchQuery.toLowerCase();
+      filteredTasks = filteredTasks.filter((task) => {
+        const assignedTo = Array.isArray(task.assignedTo)
+          ? task.assignedTo.join(', ').toLowerCase()
+          : '';
+        return (
+          task.title.toLowerCase().includes(query) ||
+          assignedTo.includes(query) ||
+          task.taskStatus.toLowerCase().includes(query) ||
+          task.description.toLowerCase().includes(query)
+        );
+      });
+    }
+
+    // Sorting
+    if (this.sortColumn) {
+      filteredTasks.sort((a, b) => {
+        let valueA = a[this.sortColumn];
+        let valueB = b[this.sortColumn];
+
+        // Handle special case for 'taskStatus'
+        if (this.sortColumn === 'taskStatus') {
+          const statusOrder = ['New', 'In Progress', 'Completed'];
+          valueA = statusOrder.indexOf(valueA);
+          valueB = statusOrder.indexOf(valueB);
+        } else {
+          // Handle special cases like arrays (e.g., 'assignedTo')
+          if (Array.isArray(valueA)) {
+            valueA = valueA.join(', ').toLowerCase();
+          }
+          if (Array.isArray(valueB)) {
+            valueB = valueB.join(', ').toLowerCase();
+          }
+
+          // Default to empty string if value is null or undefined
+          valueA = valueA || '';
+          valueB = valueB || '';
+        }
+
+        if (valueA < valueB) {
+          return this.sortDirection === 'asc' ? -1 : 1;
+        } else if (valueA > valueB) {
+          return this.sortDirection === 'asc' ? 1 : -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+    // Pagination
+    this.totalItems = filteredTasks.length;
+    const startIndex = (this.page - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.filteredTasks = filteredTasks.slice(startIndex, endIndex);
   }
 }

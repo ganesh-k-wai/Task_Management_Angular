@@ -1,5 +1,6 @@
 <div class="container-fluid p-0">
   <!-- Header -->
+
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="height: 55px;">
     <div class="container-fluid p-0">
       <a class="navbar-brand " routerLink="/project-comp">
@@ -23,7 +24,7 @@
       <div class="col-md-12 mb-4">
         <div class="card shadow">
           <div class="card-header">
-            <h4 class="card-title">Create Project</h4>
+            <h5 class="card-title">Create Project</h5>
           </div>
           <div class="card-body">
             <form (ngSubmit)="onSubmit(formRef)" #formRef="ngForm">
@@ -78,7 +79,11 @@
                     * End Date greater than Start Date
                   </div>
                 </div>
-
+                <div class="col-md-3">
+                  <label class="form-label">Due In (Days)</label>
+                  <input required type="number" class="form-control" [(ngModel)]="project.dueDate" name="dueDate"
+                    required id="dueDate" readonly />
+                </div>
                 <div class="col-md-3">
                   <label class="form-label">Team Members</label>
                   <div class="input-group">
@@ -100,13 +105,6 @@
                   <div *ngIf="project.teamMembers.length == 0 && formRef.submitted" class="text-danger">
                     * Select at least one team member
                   </div>
-                </div>
-
-
-                <div class="col-md-3">
-                  <label class="form-label">Due In (Days)</label>
-                  <input required type="number" class="form-control" [(ngModel)]="project.dueDate" name="dueDate"
-                    required id="dueDate" readonly />
                 </div>
               </div>
               <div class="row mb-3">
@@ -170,11 +168,41 @@
           </div>
 
           <!-- Sort Button -->
-          <div class="pb-1">
-            <button class="btn border border-grey" type="button" (click)="onSortChange('title')">
+          <!-- Sort Dropdown -->
+          <div class="dropdown pb-1">
+            <button class="btn  dropdown-toggle border border-grey btn-sm" type="button" id="sortDropdown"
+              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="bi bi-funnel"></i>
             </button>
+            <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+              <li style="cursor: pointer;">
+                <a class="dropdown-item" (click)="onSortChange('title')">
+                  Title
+                  <span *ngIf="sortColumn === 'title'">
+                    ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
+                  </span>
+                </a>
+              </li>
+              <li style="cursor: pointer;">
+                <a class="dropdown-item" (click)="onSortChange('dueDate')">
+                  Due Date
+                  <span *ngIf="sortColumn === 'dueDate'">
+                    ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
+                  </span>
+                </a>
+              </li>
+              <li style="cursor: pointer;">
+                <a class="dropdown-item" (click)="onSortChange('status')">
+                  Priority
+                  <span *ngIf="sortColumn === 'status'">
+                    ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
+                  </span>
+                </a>
+              </li>
+            </ul>
           </div>
+
+
         </div>
 
 
@@ -193,8 +221,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="let project of filteredProjects | paginate: { itemsPerPage: itemsPerPage, currentPage: page }">
+              <tr *ngFor="let project of filteredProjects ">
 
                 <td [title]="project.title">{{ project.title }}</td>
                 <td>{{ project.createdBy }}</td>
@@ -212,25 +239,38 @@
 
 
         <div class="d-flex justify-content-between align-items-center pb-1">
-          <!-- Items Per Page Dropdown -->
           <div class="d-flex align-items-center">
-            <!-- <label for="itemsPerPage" class="me-2 fs-6">Show</label> -->
-            <select id="itemsPerPage" class="form-select fs-6" [(ngModel)]="itemsPerPage" (change)="onPageChange(1)">
+            <select id="itemsPerPage" class="form-select fs-6" style="min-width: 20px"
+              (change)="onItemsPerPageChange($event)">
+              <option value="" selected disabled></option>
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="15">15</option>
               <option value="20">20</option>
             </select>
           </div>
-
-          <!-- Pagination Controls -->
-          <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="text-muted">Page {{ page }} of {{ totalPages() }}</span>
+            <span class="text-muted">({{ projects.length }} item{{ filteredProjects.length !== 1 ? 's' : ''
+              }})</span>
+            <div class="d-flex align-items-center">
+              <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page - 1)" [disabled]="page === 1">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="btn btn-sm px-2" type="button">{{ page }}</button>
+              <span class="mx-2">of {{ totalPages() }}</span>
+              <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page + 1)"
+                [disabled]="page === totalPages()">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
         </div>
+
+
       </div>
     </div>
   </div>
-
-
 
   <!-- Footer -->
   <!-- <footer class="footer py-2" style="background-color: whitesmoke;">

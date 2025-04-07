@@ -11,7 +11,7 @@ import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-project-component',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule,NgxPaginationModule],
+  imports: [FormsModule, CommonModule, RouterModule, NgxPaginationModule],
   templateUrl: './project-component.component.html',
   styleUrls: ['./project-component.component.css'],
 })
@@ -24,15 +24,15 @@ export class ProjectComponentComponent
   intervalId: any;
   filteredProjects: any[] = [];
 
-    // For pagination
-    page: number = 1;
-    itemsPerPage: number = 5;
-    totalItems: number = 0;
-  
-    // For searching and sorting
-    searchQuery: string = '';
-    sortColumn: string = '';
-    sortDirection: string = 'asc';
+  // For pagination
+  page: number = 1;
+  itemsPerPage: number = 2;
+  totalItems: number = 0;
+
+  // For searching and sorting
+  searchQuery: string = '';
+  sortColumn: string = '';
+  sortDirection: string = 'asc';
 
   teamMembers: string[] = [
     'Piyush',
@@ -61,8 +61,6 @@ export class ProjectComponentComponent
     estimate: '',
     timeSpent: '',
   };
-  
-
 
   constructor(
     private router: Router,
@@ -74,18 +72,8 @@ export class ProjectComponentComponent
     this.getUserName();
     this.loadProjects();
     this.startLiveDaysRemaining();
-    console.log(this.daysRemaining);
-    console.log(typeof this.daysRemaining);
   }
-  
-  // getUserName() {
-  //   const currentUser = this.userService.getCurrentUser();
-  //   if (currentUser && currentUser.user_name) {
-  //     this.userName = currentUser.user_name;
-  //   } else {
-  //     this.userName = 'User';
-  //   }
-  // }
+
   getUserName() {
     const currentUser = this.apiService.getCurrentUser();
     if (currentUser && currentUser.user_name) {
@@ -98,13 +86,12 @@ export class ProjectComponentComponent
   loadProjects() {
     this.projects = this.apiService.getProjects();
     this.applyFilters();
-
   }
 
   onSubmit(formRef: NgForm) {
     if (formRef.invalid) {
       // touch all fields only if invalid
-      Object.keys(formRef.controls).forEach(field => {
+      Object.keys(formRef.controls).forEach((field) => {
         const control = formRef.controls[field];
         control?.markAsTouched();
       });
@@ -117,9 +104,8 @@ export class ProjectComponentComponent
     formRef.resetForm({
       status: 'High',
       createdBy: this.userName,
-      teamMembers: []
+      teamMembers: [],
     });
-    
   }
 
   logout() {
@@ -151,8 +137,6 @@ export class ProjectComponentComponent
       'startDate'
     ) as HTMLInputElement;
     const endDateInput = document.getElementById('endDate') as HTMLInputElement;
-
-    
 
     startDateInput.addEventListener('change', () => {
       const startDate = new Date(startDateInput.value);
@@ -206,9 +190,8 @@ export class ProjectComponentComponent
     }
   }
 
-  // search, sort,pagination 
+  // search, sort,pagination
 
-  
   // Pagination logic
   onPageChange(page: number) {
     this.page = page;
@@ -217,7 +200,17 @@ export class ProjectComponentComponent
 
   // Searching and sorting logic
   onSearchChange() {
+    this.page = 1; //reset to first page
     this.applyFilters();
+  }
+
+  onItemsPerPageChange(event: any) {
+    this.itemsPerPage = parseInt(event.target.value, 10);
+    this.page = 1; // Reset to first page
+    this.applyFilters();
+  }
+  totalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
   onSortChange(column: string) {
@@ -235,14 +228,23 @@ export class ProjectComponentComponent
 
     // Searching
     if (this.searchQuery) {
-      filteredProjects = filteredProjects.filter(project =>
-        project.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        project.createdBy.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        project.projectManager.toLowerCase().includes(this.searchQuery.toLowerCase())||
-        project.status.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        project.teamMembers.some((member: string) =>
-          member.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
+      filteredProjects = filteredProjects.filter(
+        (project) =>
+          project.title
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase()) ||
+          project.createdBy
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase()) ||
+          project.projectManager
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase()) ||
+          project.status
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase()) ||
+          project.teamMembers.some((member: string) =>
+            member.toLowerCase().includes(this.searchQuery.toLowerCase())
+          )
       );
     }
 
@@ -251,6 +253,39 @@ export class ProjectComponentComponent
       filteredProjects.sort((a, b) => {
         const valueA = a[this.sortColumn];
         const valueB = b[this.sortColumn];
+
+        // Handle sorting by due date
+        if (this.sortColumn === 'dueDate') {
+          const dateA = new Date(a.dueDate);
+          const dateB = new Date(b.dueDate);
+          if (dateA < dateB) {
+            return this.sortDirection === 'asc' ? -1 : 1;
+          } else if (dateA > dateB) {
+            return this.sortDirection === 'asc' ? 1 : -1;
+          } else {
+            return 0;
+          }
+        }
+
+        // Handle sorting by priority
+        if (this.sortColumn === 'status') {
+          const priorityOrder: { [key: string]: number } = {
+            High: 1,
+            Medium: 2,
+            Low: 3,
+          };
+          const priorityA = priorityOrder[a.status];
+          const priorityB = priorityOrder[b.status];
+          if (priorityA < priorityB) {
+            return this.sortDirection === 'asc' ? -1 : 1;
+          } else if (priorityA > priorityB) {
+            return this.sortDirection === 'asc' ? 1 : -1;
+          } else {
+            return 0;
+          }
+        }
+
+        // Default sorting
         if (valueA < valueB) {
           return this.sortDirection === 'asc' ? -1 : 1;
         } else if (valueA > valueB) {
@@ -266,6 +301,6 @@ export class ProjectComponentComponent
     const startIndex = (this.page - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.filteredProjects = filteredProjects.slice(startIndex, endIndex);
+    console.log('Filtered projects: ', this.filteredProjects);
   }
-
 }

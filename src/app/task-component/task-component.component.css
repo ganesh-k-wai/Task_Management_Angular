@@ -1,0 +1,4 @@
+.tasksearchBox:focus {
+  box-shadow: none !important;
+  border-color: #dad4ce !important;
+}
