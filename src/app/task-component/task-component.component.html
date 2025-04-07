@@ -2,20 +2,30 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="height: 55px;">
         <div class="container-fluid p-0">
-            <a class="navbar-brand " href="#">
-                <img src="tasklogo.png" alt="Logo" width="55" height="55" class="d-inline-block align-text-top img-fluid ps-2">
-                <!-- <span class="p-1 mt-2"></span> -->
-            </a>
+      
+          <a class="navbar-brand" href="#">
+            <img src="tasklogo.png" alt="Logo" width="55" height="55" class="d-inline-block align-text-top img-fluid ps-2">
+          </a>
+      
+          <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto ms-3">
+              <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/project-comp']" routerLinkActive="active">Home</a>
+              </li>
+            </ul>
+      
             <div class="d-flex">
-                <p class="my-2">Welcome {{ userName }},</p>
-                <a>
-                    <button class="btn btn-outline-secondary ms-2 border-0" (click)="logout()">
-                        <i class="bi bi-power"></i> Logout
-                    </button>
-                </a>
+              <p class="my-2 mb-0">Welcome {{ userName }},</p>
+              <button class="btn btn-outline-secondary ms-2 border-0" (click)="logout()">
+                <i class="bi bi-power"></i> Logout
+              </button>
             </div>
+          </div>
+      
         </div>
-    </nav>
+      </nav>
+      
+      
 
     <!-- Project Details -->
     <div class="container " style="margin-top: 77px;">
