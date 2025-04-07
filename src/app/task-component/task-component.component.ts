@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 // import { ToastrService } from 'ngx-toastr';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-task-component',
@@ -27,11 +28,13 @@ export class TaskComponentComponent implements OnInit   {
   teamMembers: any[] = [];
   selectedTeamMembers: any[] = [];
 
+  selectedTaskTeamMembers: any[] = [];
 
-  projectList: any[] = [];  // All Projects List
-projectTeamMembers: any[] = []; // Team Members of selected project
-selectedTaskMembers: any[] = []; // Team Members selected for task
-selectedProjectId: any; // Selected Project ID in Create/Edit Task
+//   projectList: any[] = [];  
+// projectTeamMembers: any[] = []; 
+// selectedProjectId: any; 
+
+selectedTaskMembers: string[] = []; // Team Members selected for task
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +55,7 @@ selectedProjectId: any; // Selected Project ID in Create/Edit Task
     this.project = this.apiService.getProjectById(this.projectId);
     this.editedProject = { ...this.project }; //optionally
     this.selectedTeamMembers = this.project.teamMembers || [];
+    this.teamMembers = this.project.teamMembers || [];
 
     // console.log('pro details:', this.project);
   }
@@ -60,7 +64,7 @@ selectedProjectId: any; // Selected Project ID in Create/Edit Task
     const task = {
       task_id: this.generateUniqueId(),
       title: taskForm.value.taskTitle,
-      assignedTo: taskForm.value.assignedTo,
+      assignedTo: [...this.selectedTaskMembers],
       taskStatus: taskForm.value.taskStatus || 'New',
       taskEstimate: taskForm.value.taskEstimate,
       timeSpent: taskForm.value.timeSpent,
@@ -73,7 +77,7 @@ selectedProjectId: any; // Selected Project ID in Create/Edit Task
     this.loadTasks();
     taskForm.reset();
     this.selectedTaskMembers = [];
-  this.projectTeamMembers = [];
+  
   }
 
   loadTasks() {
@@ -122,6 +126,8 @@ selectedProjectId: any; // Selected Project ID in Create/Edit Task
     
     this.isEditing = false;
     this.loadProjectDetails();
+
+    
   }
 
   // -------------task
@@ -130,7 +136,7 @@ selectedProjectId: any; // Selected Project ID in Create/Edit Task
     const updatedTask = {
       task_id: this.currentTask.task_id,
       title: taskForm.value.taskTitle,
-      assignedTo: taskForm.value.assignedTo,
+      assignedTo: [...this.selectedTaskTeamMembers],
       taskStatus: taskForm.value.taskStatus,
       taskEstimate: taskForm.value.taskEstimate,
       timeSpent: taskForm.value.timeSpent,
@@ -139,20 +145,18 @@ selectedProjectId: any; // Selected Project ID in Create/Edit Task
     this.apiService.updateTask(this.projectId, updatedTask);
     this.isEditingTask = false;
     this.loadTasks();
+    this.selectedTaskTeamMembers = []; 
   }
 
   cancelEditTask() {
     this.isEditingTask = false;
     this.currentTask = {};
+    this.selectedTaskTeamMembers = []; 
+
   }
   editTask(task: any) {
     this.isEditingTask = true;
-  this.selectedProjectId = task.projectId;
-
-  const project = this.projectList.find(p => p.id === task.projectId);
-  this.projectTeamMembers = project?.teamMembers || [];
-
-  this.selectedTaskMembers = [...task.assignedMembers];
+  this.selectedTaskMembers = [...task.assignedTo];
 
   }
   deleteTask(taskId: string) {
@@ -177,27 +181,22 @@ selectedProjectId: any; // Selected Project ID in Create/Edit Task
     }
   }
 
-  // When project is selected in task form
-  onProjectChange(projectId: any) {
-    this.selectedProjectId = projectId;
-    const project = this.projectList.find(p => p.id === projectId);
-    this.projectTeamMembers = project?.teamMembers || [];
-    this.selectedTaskMembers = [];  // Reset on project change
-  }
-
-  // Add/Remove team member in checkbox
-  onMemberSelect(member: any, event: any) {
+  onTaskMemberChange(event: any) {
+    debugger
+    const member = event.target.value;
+    console.log('Selected member:', member);
+    console.log('Selected members:', this.selectedTaskTeamMembers);
     if (event.target.checked) {
-      this.selectedTaskMembers.push(member);
+      if (!this.selectedTaskTeamMembers.includes(member)) {
+        this.selectedTaskTeamMembers.push(member);
+      }
     } else {
-      this.selectedTaskMembers = this.selectedTaskMembers.filter(m => m !== member);
+      const index = this.selectedTaskTeamMembers.indexOf(member);
+      if (index > -1) {
+        this.selectedTaskTeamMembers.splice(index, 1);
+      }
     }
   }
-
-  
-
-
-
 
 
 

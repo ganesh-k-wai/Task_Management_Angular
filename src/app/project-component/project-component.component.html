@@ -26,63 +26,95 @@
                         <h4 class="card-title">Create Project</h4>
                     </div>
                     <div class="card-body">
-                        <form (ngSubmit)="onSubmit()">
+                        <form (ngSubmit)="onSubmit(formRef)" #formRef="ngForm">
                             <div class="row mb-3">
                                 <div class="col-md-3">
                                     <label class="form-label">Project Title</label>
                                     <input required type="text" class="form-control" [(ngModel)]="project.title"
-                                        name="title" required />
+                                        name="title" required   #title="ngModel" />
+                                        <div *ngIf="title.invalid && title.touched" class="text-danger">
+                                            * Project Title is required
+                                          </div>
                                 </div>
+                              
                                 <div class="col-md-3">
                                     <label class="form-label">Description</label>
-                                    <textarea class="form-control" rows="1" [(ngModel)]="project.description"
-                                        name="description" required></textarea>
-                                </div>
+                                    <textarea 
+                                      class="form-control" 
+                                      rows="1" 
+                                      [(ngModel)]="project.description" 
+                                      name="description" 
+                                      required 
+                                      #desc="ngModel"></textarea>
+                                      
+                                    <div *ngIf="desc.invalid && desc.touched" class="text-danger">
+                                      * Description is required
+                                    </div>
+                                  </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Created By</label>
                                     <input type="text" class="form-control" [value]="userName" name="createdBy" required
                                         readonly />
+                                        
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Project Manager</label>
-                                    <input required type="text" class="form-control"
-                                        [(ngModel)]="project.projectManager" name="projectManager" required />
-                                </div>
+                                    <input 
+                                      type="text" 
+                                      class="form-control" 
+                                      [(ngModel)]="project.projectManager" 
+                                      name="projectManager" 
+                                      required 
+                                      #pm="ngModel"/>
+                                      
+                                    <div *ngIf="pm.invalid && pm.touched" class="text-danger">
+                                      * Project Manager is required
+                                    </div>
+                                  </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-3">
                                     <label class="form-label">Start Date</label>
                                     <input required type="date" class="form-control" [(ngModel)]="project.startDate"
-                                        name="startDate" required id="startDate" />
+                                        name="startDate" required id="startDate" #startDate="ngModel" />
+                                        <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">
+                                            * Start Date is required
+                                          </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">End Date</label>
                                     <input required type="date" class="form-control" [(ngModel)]="project.endDate"
                                         name="endDate" required id="endDate" />
+                                        <div *ngIf="project.endDate < project.startDate" class="text-danger">
+                                            * End Date  greater than Start Date
+                                          </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">Team Members</label>
                                     <div class="input-group">
-                                        <div class="dropdown w-100 ">
-                                            <button class="btn dropdown-toggle border border-grey w-100 text-start"
-                                                type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                Select Team Members
-                                            </button>
-                                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                                                style="padding: 10px; max-height: 200px; overflow-y: auto;">
-                                                <li class="d-flex align-items-center"
-                                                    *ngFor="let member of apiService.teamMembers">
-                                                    <input type="checkbox" [id]="member" [value]="member"
-                                                        (change)="onCheckboxChange($event)"
-                                                        [checked]="project.teamMembers.includes(member)" class="me-2">
-                                                    <label [for]="member">{{ member }}</label>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                      <div class="dropdown w-100">
+                                        <button class="btn dropdown-toggle border border-grey w-100 text-start"
+                                          type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                          aria-expanded="false">
+                                          Select Team Members
+                                        </button>
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
+                                          style="padding: 10px; max-height: 200px; overflow-y: auto;">
+                                          <li class="d-flex align-items-center"
+                                            *ngFor="let member of apiService.teamMembers">
+                                            <input type="checkbox" [id]="member" [value]="member"
+                                              (change)="onCheckboxChange($event)"
+                                              [checked]="project.teamMembers.includes(member)" class="me-2">
+                                            <label [for]="member">{{ member }}</label>
+                                          </li>
+                                        </ul>
+                                      </div>
                                     </div>
-                                </div>
+                                    <div *ngIf="project.teamMembers.length == 0 && formRef.submitted" class="text-danger">
+                                      * Select at least one team member
+                                    </div>
+                                  </div>
 
 
                                 <div class="col-md-3">
@@ -94,29 +126,43 @@
                             <div class="row mb-3">
                                 <div class="col-md-3">
                                     <label class="form-label">Priority</label>
-                                    <select class="form-select" [(ngModel)]="project.status" name="status" required>
-                                        <option value="High" selected>High</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="Low">Low</option>
+                                    <select class="form-select" [(ngModel)]="project.status"
+                                      name="status" required #status="ngModel">
+                                      <option value="" disabled>Select Priority</option>
+                                      <option value="High" selected>High</option>
+                                      <option value="Medium">Medium</option>
+                                      <option value="Low">Low</option>
                                     </select>
-                                </div>
-                                <div class="col-md-3">
+                                    <div *ngIf="status.invalid && status.touched" class="text-danger">
+                                      * Priority is required
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
                                     <label class="form-label">Assigned To</label>
-                                    <input required type="text" class="form-control" [(ngModel)]="project.assignedTo"
-                                        name="assignedTo" required />
-                                </div>
-                                <div class="col-md-3">
+                                    <input type="text" class="form-control" [(ngModel)]="project.assignedTo"
+                                      name="assignedTo" required #assignedTo="ngModel" />
+                                    <div *ngIf="assignedTo.invalid && assignedTo.touched" class="text-danger">
+                                      * Assigned To is required
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
                                     <label class="form-label">Estimate (hours)</label>
-                                    <input required type="number" class="form-control" [(ngModel)]="project.estimate"
-                                        name="estimate"  required />
-                                </div>
-                                <div class="col-md-3">
+                                    <input type="number" class="form-control" [(ngModel)]="project.estimate"
+                                      name="estimate" required #estimate="ngModel" />
+                                    <div *ngIf="estimate.invalid && estimate.touched" class="text-danger">
+                                      * Estimate is required
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
                                     <label class="form-label">Time Spent (hours)</label>
-                                    <input required type="number" class="form-control" [(ngModel)]="project.timeSpent"
-                                        name="timeSpent"  required />
-                                </div>
+                                    <input type="number" class="form-control" [(ngModel)]="project.timeSpent"
+                                      name="timeSpent" required #timeSpent="ngModel" />
+                                    <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
+                                      * Time Spent is required
+                                    </div>
+                                  </div>
                             </div>
-                            <button type="submit" class="btn btn-outline-secondary border border-grey">Create Project</button>
+                            <button type="submit" class="btn btn-outline-secondary border border-grey" [disabled]="formRef.invalid || project.teamMembers.length==0"  >Create Project</button>
                         </form>
                     </div>
                 </div>
@@ -143,22 +189,7 @@
                         </button>
                     </div>
                 </div>
-                <!-- <div class="d-flex justify-content-between align-items-center">
-                    <div class="pb-1 d-flex align-items-center">
-                        <div class="input-group w-100">
-                            <input type="search" class="form-control projectsearchBox" placeholder="Search..." aria-label="Search">
-                            <button class="btn border border-grey" type="button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="pb-1">
-                        <button class="btn border border-grey" type="button">
-                            <i class="bi bi-funnel"></i>
-                        </button>
-                    </div>
-                </div> -->
+            
 
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered">
@@ -210,14 +241,9 @@
                             <option value="20">20</option>
                         </select>
                     </div>
-
-
-
                     <div class="d-flex align-items-center justify-content-between">
                         <span class="text-muted">Page 1 of 1</span>
-
                         <span class="text-muted">(1 item)</span>
-
                         <div class="d-flex align-items-center">
                             <button class="btn  btn-sm px-2" type="button"><i class="bi bi-chevron-left"></i></button>
                             <button class="btn  btn-sm px-2" type="button">1</button>
@@ -245,6 +271,8 @@
             </div>
         </div>
     </div>
+
+    
 
     <!-- Footer -->
     <!-- <footer class="footer py-2" style="background-color: whitesmoke;">

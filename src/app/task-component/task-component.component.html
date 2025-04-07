@@ -124,8 +124,8 @@
                     <form (ngSubmit)="saveProject()">
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="projectManager">Created By</label>
-                                <input type="text" disabled id="projectManager" [(ngModel)]="editedProject.createdBy
+                                <label for="createdBy">Created By</label>
+                                <input type="text" disabled id="createdBy" [(ngModel)]="editedProject.createdBy
                                 " name="createdBy" class="form-control" required>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -150,8 +150,7 @@
                                         <option value="Medium">Medium</option>
                                         <option value="Low">Low</option>
                                 </select>
-                                <!-- <input type="text" id="projectManager" [(ngModel)]="editedProject.status"
-                                    name="status" class="form-control" required> -->
+                         
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="projectManager">Assigned To</label>
@@ -234,8 +233,8 @@
                                       Select Team Members
                                     </button>
                                     <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton" style="padding: 10px; max-height: 200px; overflow-y: auto;">
-                                      <li class="d-flex align-items-center" *ngFor="let member of selectedTeamMembers">
-                                        <input type="checkbox" [id]="member" [value]="member" (change)="onCheckboxChange($event)" [checked]="editedProject.teamMembers.includes(member)" class="me-2">
+                                      <li class="d-flex align-items-center" *ngFor="let member of teamMembers">
+                                        <input type="checkbox" [id]="member" [value]="member" (change)="onTaskMemberChange($event)" [checked]="selectedTaskTeamMembers.includes(member)" class="me-2">
                                         <label [for]="member">{{ member }}</label>
                                       </li>
                                     </ul>
@@ -288,22 +287,11 @@
                                 <input type="text" id="taskTitle" name="taskTitle" class="form-control"
                                     [(ngModel)]="currentTask.title" required>
                             </div>
-                                <div class="col-md-4">
-                                <label class="">Assigned To</label>
-                                <div class="input-group">
-                                  <div class="dropdown w-100">
-                                    <button class="btn dropdown-toggle border border-grey w-100 text-start" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Select Team Members
-                                    </button>
-                                    <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton" style="padding: 10px; max-height: 200px; overflow-y: auto;">
-                                      <li class="d-flex align-items-center" *ngFor="let member of selectedTeamMembers">
-                                        <input type="checkbox" [id]="member" [value]="member" (change)="onCheckboxChange($event)" [checked]="editedProject.teamMembers.includes(member)" class="me-2">
-                                        <label [for]="member">{{ member }}</label>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="assignedTo">Assigned To</label>
+                                <input type="text" id="assignedTo" name="assignedTo" class="form-control"
+                                    [(ngModel)]="currentTask.assignedTo" required>
+                            </div>
                             <div class="col-md-4 mb-3">
                                 <label for="status"> Status</label>
                                 <select id="status" name="taskStatus" class="form-control"

@@ -77,7 +77,7 @@ export class ApiService {
     );
     if (projectIndex !== -1) {
       projects[projectIndex].tasks = projects[projectIndex].tasks || [];
-      projects[projectIndex].tasks.unshift(task);
+      projects[projectIndex].tasks.push(task);
       localStorage.setItem('projects', JSON.stringify(projects));
     }
   }

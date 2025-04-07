@@ -6,6 +6,7 @@ import { UserService } from '../user.service';
 import { ApiService } from '../api.service';
 import { v4 as uuidv4 } from 'uuid';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationModule
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-project-component',
@@ -25,7 +26,7 @@ export class ProjectComponentComponent
 
     // For pagination
     page: number = 1;
-    itemsPerPage: number = 3;
+    itemsPerPage: number = 5;
     totalItems: number = 0;
   
     // For searching and sorting
@@ -100,27 +101,25 @@ export class ProjectComponentComponent
 
   }
 
-  onSubmit() {
-    console.log('Project Created:', this.project);
+  onSubmit(formRef: NgForm) {
+    if (formRef.invalid) {
+      // touch all fields only if invalid
+      Object.keys(formRef.controls).forEach(field => {
+        const control = formRef.controls[field];
+        control?.markAsTouched();
+      });
+      return;
+    }
     this.project.project_Id = this.generateUniqueId();
     this.project.createdBy = this.userName;
     this.apiService.addProject(this.project);
     this.loadProjects();
-    this.project = {
-      project_Id: '',
-      title: '',
-      description: '',
-      createdBy: this.userName,
-      projectManager: '',
-      startDate: '',
-      endDate: '',
-      teamMembers: [],
-      dueDate: '',
+    formRef.resetForm({
       status: 'High',
-      assignedTo: '',
-      estimate: '',
-      timeSpent: '',
-    };
+      createdBy: this.userName,
+      teamMembers: []
+    });
+    
   }
 
   logout() {
