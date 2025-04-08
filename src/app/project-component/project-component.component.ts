@@ -124,6 +124,7 @@ export class ProjectComponentComponent
       createdBy: this.userName,
       teamMembers: [],
     });
+    alert('Project added successfully!');
   }
 
   logout() {

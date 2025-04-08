@@ -48,5 +48,6 @@ export class LoginComponent {
   save_signUp() {
     this.apiService.signUp(this.signup.user_name, this.signup.user_password);
     this.signup = { user_name: '', user_password: '' };
+    this.isLogin = !this.isLogin;
   }
 }

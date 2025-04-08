@@ -97,6 +97,7 @@ export class TaskComponentComponent implements OnInit {
 
     this.isEditing = false;
     this.loadProjectDetails();
+    alert('Project updated successfully!');
   }
 
   // -------------task
@@ -130,6 +131,7 @@ export class TaskComponentComponent implements OnInit {
     taskForm.reset();
     this.selectedTaskMembers = [];
     console.log(this.selectedTaskMembers);
+    alert('Task added successfully!');
   }
 
   loadTasks() {
@@ -151,6 +153,7 @@ export class TaskComponentComponent implements OnInit {
     this.isEditingTask = false;
     this.loadTasks();
     this.selectedTaskTeamMembers = [];
+    alert('Task updated successfully!');
   }
 
   cancelEditTask() {
