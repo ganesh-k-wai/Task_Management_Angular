@@ -1,22 +1,7 @@
 <div class="container-fluid p-0">
   <!-- Header -->
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="height: 55px;">
-    <div class="container-fluid p-0">
-      <a class="navbar-brand " routerLink="/project-comp">
-        <img src="tasklogo.png" alt="Logo" width="55" height="55" class="d-inline-block align-text-top img-fluid ps-2">
-        <span class="p-1 mt-2"></span>
-      </a>
-      <div class="d-flex">
-        <p class="my-2">Welcome {{ userName }},</p>
-        <a>
-          <button class="btn btn-outline-secondary ms-2 border-0" (click)="logout()">
-            <i class="bi bi-power"></i> Logout
-          </button>
-        </a>
-      </div>
-    </div>
-  </nav>
+  <app-header [userName]="userName"></app-header>
 
   <!-- Main Content -->
   <div class="container mt-5 p-5">
@@ -207,7 +192,7 @@
 
 
         <div class="table-responsive">
-          <table class="table table-striped table-bordered">
+          <table class="table table-striped table-bordered" [class.table-dark]="isDarkMode">
             <thead class="thead-light">
               <tr class="">
                 <th>Title</th>

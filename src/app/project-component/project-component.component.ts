@@ -7,11 +7,12 @@ import { ApiService } from '../api.service';
 import { v4 as uuidv4 } from 'uuid';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationModule
 import { NgForm } from '@angular/forms';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-project-component',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, NgxPaginationModule],
+  imports: [FormsModule, CommonModule, RouterModule, NgxPaginationModule,HeaderComponent],
   templateUrl: './project-component.component.html',
   styleUrls: ['./project-component.component.css'],
 })
@@ -19,10 +20,12 @@ export class ProjectComponentComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   projects: any[] = [];
-  userName: string | null = '';
+  userName: string = '';
   daysRemaining: number = 0;
   intervalId: any;
   filteredProjects: any[] = [];
+
+  isDarkMode: boolean = false;
 
   // For pagination
   page: number = 1;
@@ -66,7 +69,13 @@ export class ProjectComponentComponent
     private router: Router,
     private userService: UserService,
     public apiService: ApiService
-  ) {}
+  ) {
+    const darkModePreference = localStorage.getItem('darkMode');
+    this.isDarkMode = darkModePreference === 'true';
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-mode');
+    }
+  }
 
   ngOnInit() {
     this.getUserName();
@@ -80,6 +89,16 @@ export class ProjectComponentComponent
       this.userName = currentUser.user_name;
     } else {
       this.userName = 'User';
+    }
+  }
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', 'true');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', 'false');
     }
   }
 

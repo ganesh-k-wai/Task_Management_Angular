@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 // import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-task-component',
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule,HeaderComponent],
   templateUrl: './task-component.component.html',
   styleUrls: ['./task-component.component.css'],
 })
@@ -22,6 +23,7 @@ export class TaskComponentComponent implements OnInit {
   editedProject: any = {};
 
   filteredTasks: any[] = [];
+  isDarkMode: boolean = false;
 
   // For pagination
   page: number = 1;

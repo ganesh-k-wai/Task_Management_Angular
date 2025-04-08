@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg fixed-top" [class.bg-dark]="isDarkMode" [class.navbar-dark]="isDarkMode" [class.bg-primary-subtle]="!isDarkMode" [class.navbar-light]="!isDarkMode" style="height: 55px;">
+
+    
+    <div class="container-fluid p-0">
+
+        <a class="navbar-brand" href="#">
+            <img src="tasklogo.png" alt="Logo" width="55" height="55"
+                class="d-inline-block align-text-top img-fluid ps-2">
+        </a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto ms-3">
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/project-comp']" routerLinkActive="active">Home</a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <button class="btn  ms-2 me-1 border-0" (click)="toggleDarkMode()">
+                    <i [class]="isDarkMode ? 'bi bi-moon-stars-fill' : 'bi bi-moon-stars'"></i>
+                </button>
+                <p class="my-2 mb-0 mt-0">Welcome {{ userName }},</p>
+                <button class="btn btn-outline-danger ms-2 me-1 border-0" (click)="logout()">
+                    <i class="bi bi-power"></i> Logout
+                </button>
+            </div>
+        </div>
+
+    </div>
+</nav>
