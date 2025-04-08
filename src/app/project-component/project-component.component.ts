@@ -12,7 +12,13 @@ import { HeaderComponent } from '../header/header.component';
 @Component({
   selector: 'app-project-component',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, NgxPaginationModule,HeaderComponent],
+  imports: [
+    FormsModule,
+    CommonModule,
+    RouterModule,
+    NgxPaginationModule,
+    HeaderComponent,
+  ],
   templateUrl: './project-component.component.html',
   styleUrls: ['./project-component.component.css'],
 })
@@ -27,6 +33,9 @@ export class ProjectComponentComponent
 
   isDarkMode: boolean = false;
 
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+  }
   // For pagination
   page: number = 1;
   itemsPerPage: number = 2;
@@ -89,16 +98,6 @@ export class ProjectComponentComponent
       this.userName = currentUser.user_name;
     } else {
       this.userName = 'User';
-    }
-  }
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem('darkMode', 'false');
     }
   }
 

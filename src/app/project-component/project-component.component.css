@@ -3,7 +3,7 @@
 }
 
 .card-header {
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   border-bottom: 1px solid #e9ecef;
 }
 
@@ -24,8 +24,7 @@
   font-size: 14px;
 }
 
-.projectsearchBox:focus{
+.projectsearchBox:focus {
   box-shadow: none !important;
-  border-color: #dad4ce !important; 
+  border-color: #dad4ce !important;
 }
-@import "~flatpickr/dist/flatpickr.min.css";

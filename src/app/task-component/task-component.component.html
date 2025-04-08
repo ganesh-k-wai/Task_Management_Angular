@@ -11,7 +11,7 @@
         <div class="container mt-3">
             <!-- Project Details  -->
             <h5>Project Details:</h5>
-            <div *ngIf="!isEditing" class="card mb-3">
+            <div *ngIf="!isEditing" class="card mb-3 shadow">
                 <div class="card-header d-flex justify-content-between">
                     <div class="d-flex align-items-center">
                         <h6 class="mb-0">Project Name :</h6>
@@ -72,7 +72,13 @@
                             </div>
                             <div class="mb-3">
                                 <strong>Status:</strong>
-                                <p>{{ project.status }}</p>
+                                <p [ngClass]="{
+                                              'text-danger': project.status === 'High',
+                                              'text-warning': project.status === 'Medium',
+                                              'text-success': project.status === 'Low'
+                                            }">
+                                    {{ project.status }}
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -103,7 +109,7 @@
             </div>
 
             <!-- Edit Project Form -->
-            <div *ngIf="isEditing" class="card mb-3">
+            <div *ngIf="isEditing" class="card mb-3 shadow">
                 <div class="card-header">
                     <h5>Edit Project</h5>
                 </div>
@@ -234,7 +240,7 @@
             </div>
 
             <!-- Create Task Form -->
-            <div *ngIf="!isEditingTask" class="card mb-3 shadow-sm">
+            <div *ngIf="!isEditingTask" class="card mb-3 shadow">
                 <div class="card-header">
                     <h5>Create Task</h5>
                 </div>
@@ -319,7 +325,7 @@
             </div>
 
             <!-- Edit Task Form -->
-            <div *ngIf="isEditingTask" class="card mb-3 shadow-sm">
+            <div *ngIf="isEditingTask" class="card mb-3 shadow">
                 <div class="card-header">
                     <h5>Edit Task</h5>
                 </div>
@@ -454,14 +460,14 @@
                 </div>
             </div>
             <!-- Task List -->
-            <div class="card mb-3">
+            <div class="card mb-3 shadow">
                 <div class="card-header">
                     <h5>Task List</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-striped" [class.table-dark]="isDarkMode">
-                            <thead>
+                            <thead class="table-secondary">
                                 <tr class="text-center">
                                     <th>Sr.No</th>
                                     <th>Action</th>
@@ -501,7 +507,7 @@
             <div class="col-md-12 mb-3">
                 <div class="d-flex justify-content-between align-items-center pb-1">
                     <!-- Items Per Page Dropdown -->
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center d-none d-md-block">
                         <select id="itemsPerPage" class="form-select fs-6 " style="min-width: 20px"
                             (change)="onTaskItemsPerPageChange($event)">
                             <option value="" selected disabled></option>

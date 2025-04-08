@@ -10,7 +10,7 @@ import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-task-component',
-  imports: [FormsModule, CommonModule, RouterModule,HeaderComponent],
+  imports: [FormsModule, CommonModule, RouterModule, HeaderComponent],
   templateUrl: './task-component.component.html',
   styleUrls: ['./task-component.component.css'],
 })

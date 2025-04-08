@@ -1,5 +1,5 @@
-import { Component,Input } from '@angular/core';
-import { RouterModule,Router } from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { UserService } from '../user.service';
 
 @Component({
@@ -13,8 +13,6 @@ export class HeaderComponent {
   @Input() userName: string = '';
   isDarkMode: boolean = false; // Track dark mode state
 
-
-
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
     if (this.isDarkMode) {
@@ -24,11 +22,7 @@ export class HeaderComponent {
     }
   }
 
-  constructor(
-    private userService: UserService,
-        private router: Router,
-
-  ) {}
+  constructor(private userService: UserService, private router: Router) {}
   logout() {
     this.userService.logout();
     this.router.navigate(['/']);

@@ -1,46 +1,61 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card" style="width: 25rem;">
+    <div class="card shadow-lg" style="width: 25rem;">
         <div class="card-body">
             <!-- Login Form -->
             <div *ngIf="isLogin">
                 <h3 class="card-title text-center mb-4">Login</h3>
-                <form>
+                <form (ngSubmit)="save_login()" #loginForm="ngForm">
                     <div class="mb-3">
-                        <label for="we" class="form-label">Name:</label>
-                        <input type="text" id="we" name="userName" class="form-control" [(ngModel)]="login.user_name"
-                            required>
+                        <label for="loginName" class="form-label">Name:</label>
+                        <input type="text" id="loginName" name="userName" class="form-control"
+                            [(ngModel)]="login.user_name" required #userName="ngModel">
+                        <div *ngIf="userName.invalid && userName.touched" class="text-danger">
+                            Name is required.
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label for="pp" class="form-label">Password:</label>
-                        <input type="text" id="pp" name="userPassword" class="form-control"
-                            [(ngModel)]="login.user_password" required>
+                        <label for="loginPassword" class="form-label">Password:</label>
+                        <input type="password" id="loginPassword" name="userPassword" class="form-control"
+                            [(ngModel)]="login.user_password" required #userPassword="ngModel">
+                        <div *ngIf="userPassword.invalid && userPassword.touched" class="text-danger">
+                            Password is required.
+                        </div>
                     </div>
                     <div class="text-center">
-                        <button type="button" class="btn btn-primary w-75" (click)="save_login()">Login</button>
+                        <button type="submit" class="btn btn-primary w-75" [disabled]="loginForm.invalid">Login</button>
                     </div>
                 </form>
-                <p class="text-center mt-3">Don't have an account? <a href="#" (click)="toggleForm()">Sign Up</a></p>
+                <p class="text-center mt-3">Don't have an account? <a class="text-decoration-none" href="#"
+                        (click)="toggleForm()">Sign Up</a></p>
             </div>
 
             <!-- Sign Up Form -->
             <div *ngIf="!isLogin">
                 <h3 class="card-title text-center mb-4">Sign Up</h3>
-                <form>
+                <form (ngSubmit)="save_signUp()" #signUpForm="ngForm">
                     <div class="mb-3">
-                        <label for="ee" class="form-label">Name:</label>
-                        <input type="text" id="ee" name="signUpName" class="form-control" [(ngModel)]="signup.user_name"
-                            required>
+                        <label for="signUpName" class="form-label">Name:</label>
+                        <input type="text" id="signUpName" name="signUpName" class="form-control"
+                            [(ngModel)]="signup.user_name" required #signUpName="ngModel">
+                        <div *ngIf="signUpName.invalid && signUpName.touched" class="text-danger">
+                            Name is required.
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label for="qq" class="form-label">Password:</label>
-                        <input type="text" id="qq" name="signUpPassword" class="form-control"
-                            [(ngModel)]="signup.user_password" required>
+                        <label for="signUpPassword" class="form-label">Password:</label>
+                        <input type="password" id="signUpPassword" name="signUpPassword" class="form-control"
+                            [(ngModel)]="signup.user_password" required #signUpPassword="ngModel">
+                        <div *ngIf="signUpPassword.invalid && signUpPassword.touched" class="text-danger">
+                            Password is required.
+                        </div>
                     </div>
                     <div class="text-center">
-                        <button type="button" class="btn btn-primary w-75" (click)="save_signUp()">Sign Up</button>
+                        <button type="submit" class="btn btn-primary w-75" [disabled]="signUpForm.invalid">Sign
+                            Up</button>
                     </div>
                 </form>
-                <p class="text-center mt-3">Already have an account? <a href="#" (click)="toggleForm()">Login</a></p>
+                <p class="text-center mt-3">Already have an account? <a href="#" class="text-decoration-none"
+                        (click)="toggleForm()">Login</a></p>
             </div>
         </div>
     </div>
