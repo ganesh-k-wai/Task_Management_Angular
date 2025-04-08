@@ -5,9 +5,10 @@ import { RouterModule, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { ApiService } from '../api.service';
 import { v4 as uuidv4 } from 'uuid';
-import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationModule
+import { NgxPaginationModule } from 'ngx-pagination';
 import { NgForm } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-project-component',
@@ -77,7 +78,8 @@ export class ProjectComponentComponent
   constructor(
     private router: Router,
     private userService: UserService,
-    public apiService: ApiService
+    public apiService: ApiService,
+    private toastr: ToastrService
   ) {
     const darkModePreference = localStorage.getItem('darkMode');
     this.isDarkMode = darkModePreference === 'true';
@@ -108,7 +110,6 @@ export class ProjectComponentComponent
 
   onSubmit(formRef: NgForm) {
     if (formRef.invalid) {
-      // touch all fields only if invalid
       Object.keys(formRef.controls).forEach((field) => {
         const control = formRef.controls[field];
         control?.markAsTouched();
@@ -124,7 +125,7 @@ export class ProjectComponentComponent
       createdBy: this.userName,
       teamMembers: [],
     });
-    alert('Project added successfully!');
+    this.toastr.success('Project added successfully!');
   }
 
   logout() {
@@ -194,7 +195,7 @@ export class ProjectComponentComponent
     this.updateDaysRemaining();
     this.intervalId = setInterval(() => {
       this.updateDaysRemaining();
-    }, 1000 * 60 * 60 * 24); // Update every day
+    }, 1000 * 60 * 60 * 24);
   }
 
   onCheckboxChange(event: any) {
@@ -211,21 +212,19 @@ export class ProjectComponentComponent
 
   // search, sort,pagination
 
-  // Pagination logic
   onPageChange(page: number) {
     this.page = page;
     this.applyFilters();
   }
 
-  // Searching and sorting logic
   onSearchChange() {
-    this.page = 1; //reset to first page
+    this.page = 1;
     this.applyFilters();
   }
 
   onItemsPerPageChange(event: any) {
     this.itemsPerPage = parseInt(event.target.value, 10);
-    this.page = 1; // Reset to first page
+    this.page = 1;
     this.applyFilters();
   }
   totalPages(): number {
@@ -273,7 +272,6 @@ export class ProjectComponentComponent
         const valueA = a[this.sortColumn];
         const valueB = b[this.sortColumn];
 
-        // Handle sorting by due date
         if (this.sortColumn === 'dueDate') {
           const dateA = new Date(a.dueDate);
           const dateB = new Date(b.dueDate);
@@ -286,7 +284,6 @@ export class ProjectComponentComponent
           }
         }
 
-        // Handle sorting by priority
         if (this.sortColumn === 'status') {
           const priorityOrder: { [key: string]: number } = {
             High: 1,

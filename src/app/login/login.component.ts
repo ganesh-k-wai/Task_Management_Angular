@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +13,6 @@ import { ApiService } from '../api.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  errorMsg: string = 'Invalid Credential.!';
-  successMsg: string = 'User Login Successful.';
   isLogin = true;
 
   login: any = {
@@ -25,7 +24,11 @@ export class LoginComponent {
     user_password: '',
   };
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private toastr: ToastrService
+  ) {}
 
   toggleForm() {
     this.isLogin = !this.isLogin;
@@ -37,10 +40,12 @@ export class LoginComponent {
       this.login.user_password
     );
     if (isLoggedIn) {
-      alert(this.successMsg);
+      // alert(this.successMsg);
+      this.toastr.success(' Login Successfully.'); // Toast notification
+
       this.router.navigate(['/project-comp']);
     } else {
-      alert(this.errorMsg);
+      this.toastr.error('Invalid credentials!');
     }
     this.login = {};
   }
@@ -49,5 +54,6 @@ export class LoginComponent {
     this.apiService.signUp(this.signup.user_name, this.signup.user_password);
     this.signup = { user_name: '', user_password: '' };
     this.isLogin = !this.isLogin;
+    this.toastr.success(' Sign Up Successfully.'); // Toast notification
   }
 }

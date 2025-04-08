@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { UserService } from '../user.service';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-header',
   imports: [RouterModule],
@@ -11,7 +11,7 @@ import { UserService } from '../user.service';
 })
 export class HeaderComponent {
   @Input() userName: string = '';
-  isDarkMode: boolean = false; // Track dark mode state
+  isDarkMode: boolean = false;
 
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
@@ -22,9 +22,14 @@ export class HeaderComponent {
     }
   }
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
   logout() {
     this.userService.logout();
     this.router.navigate(['/']);
+    this.toastr.success(' Logout Successfully.');
   }
 }

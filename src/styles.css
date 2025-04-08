@@ -42,3 +42,42 @@ body.dark-mode .dropdown-menu {
   background-color: #2c2c2c;
   color: #ffffff;
 }
+/* Toast notification styles */
+.toast {
+  position: fixed;
+  z-index: 9999;
+  padding: 15px;
+  border-radius: 3px;
+  font-size: 14px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  top: 30px !important;
+  right: 20px !important;
+}
+
+.toast-success {
+  background-color: #51a351;
+  color: #ffffff;
+  padding: 5px;
+}
+.toast-top-right {
+  top: 50px;
+  right: 20px;
+  padding: 5px;
+}
+.toast-error {
+  background-color: #bd362f;
+  color: #ffffff;
+  padding: 5px;
+}
+
+.toast-info {
+  background-color: #2f96b4;
+  color: #ffffff;
+  padding: 5px;
+}
+
+.toast-warning {
+  background-color: #f89406;
+  color: #ffffff;
+  padding: 5px;
+}

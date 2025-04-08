@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { v4 as uuidv4 } from 'uuid';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 
@@ -39,7 +39,8 @@ export class TaskComponentComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -97,23 +98,22 @@ export class TaskComponentComponent implements OnInit {
 
     this.isEditing = false;
     this.loadProjectDetails();
-    alert('Project updated successfully!');
+    this.toastr.success('Project updated successfully!');
   }
 
   // -------------task
 
   isEditingTask: boolean = false;
-  currentTask: any = {}; // it shows current task values in edit task
+  currentTask: any = {};
   daysRemaining: number = 0;
   intervalId: any;
-  teamMembers: any[] = []; // project team member of that perticular Id
+  teamMembers: any[] = [];
   selectedTeamMembers: any[] = [];
 
-  selectedTaskTeamMembers: any[] = []; //create task assignedto value stores
-
+  selectedTaskTeamMembers: any[] = [];
   selectedTaskMembers: string[] = [];
 
-  infinityValue: number = Infinity; // est & spend time
+  infinityValue: number = Infinity;
 
   addTask(taskForm: any) {
     const task = {
@@ -131,7 +131,7 @@ export class TaskComponentComponent implements OnInit {
     taskForm.reset();
     this.selectedTaskMembers = [];
     console.log(this.selectedTaskMembers);
-    alert('Task added successfully!');
+    this.toastr.success('Task added successfully!');
   }
 
   loadTasks() {
@@ -153,7 +153,7 @@ export class TaskComponentComponent implements OnInit {
     this.isEditingTask = false;
     this.loadTasks();
     this.selectedTaskTeamMembers = [];
-    alert('Task updated successfully!');
+    this.toastr.success('Task updated successfully!');
   }
 
   cancelEditTask() {
@@ -224,7 +224,7 @@ export class TaskComponentComponent implements OnInit {
       alert('Start Date cannot be after End Date');
       this.editedProject.endDate = null;
     }
-    this.calculateDueDays(); // optional for auto calculate
+    this.calculateDueDays();
   }
 
   onEndDateChange() {
@@ -235,12 +235,10 @@ export class TaskComponentComponent implements OnInit {
       alert('End Date cannot be before Start Date');
       this.editedProject.endDate = null;
     }
-    this.calculateDueDays(); // optional for auto calculate
+    this.calculateDueDays();
   }
 
   // -------searching sort----------
-
-  // search, sort, pagination
 
   onTaskPageChange(page: number) {
     this.page = page;
@@ -249,12 +247,12 @@ export class TaskComponentComponent implements OnInit {
 
   onTaskItemsPerPageChange(event: any) {
     this.itemsPerPage = parseInt(event.target.value, 10);
-    this.page = 1; // Reset to first page
+    this.page = 1;
     this.applyTaskFilters();
   }
 
   onTaskSearchChange() {
-    this.page = 1; // Reset to first page
+    this.page = 1;
     this.applyTaskFilters();
   }
   totalPages(): number {
@@ -272,7 +270,7 @@ export class TaskComponentComponent implements OnInit {
   }
 
   private applyTaskFilters() {
-    let filteredTasks = [...this.tasks]; // Clone the tasks array to avoid mutating the original
+    let filteredTasks = [...this.tasks];
 
     // Searching
     if (this.searchQuery) {
@@ -296,13 +294,11 @@ export class TaskComponentComponent implements OnInit {
         let valueA = a[this.sortColumn];
         let valueB = b[this.sortColumn];
 
-        // Handle special case for 'taskStatus'
         if (this.sortColumn === 'taskStatus') {
           const statusOrder = ['New', 'In Progress', 'Completed'];
           valueA = statusOrder.indexOf(valueA);
           valueB = statusOrder.indexOf(valueB);
         } else {
-          // Handle special cases like arrays (e.g., 'assignedTo')
           if (Array.isArray(valueA)) {
             valueA = valueA.join(', ').toLowerCase();
           }
@@ -310,7 +306,6 @@ export class TaskComponentComponent implements OnInit {
             valueB = valueB.join(', ').toLowerCase();
           }
 
-          // Default to empty string if value is null or undefined
           valueA = valueA || '';
           valueB = valueB || '';
         }
