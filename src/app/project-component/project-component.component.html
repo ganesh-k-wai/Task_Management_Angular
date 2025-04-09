@@ -1,318 +1,274 @@
-<div class="container-fluid p-0">
+<div class="container-fluid  ">
   <!-- Header -->
-
-  <app-header [userName]="userName"></app-header>
-
-  <!-- Main Content -->
-  <div class="container mt-5 p-5">
-    <div class="row">
-      <div class="col-md-12 mb-4">
-        <div class="card shadow">
-          <div class="card-header">
-            <h5 class="card-title">Create Project</h5>
-          </div>
-          <div class="card-body">
-            <form (ngSubmit)="onSubmit(formRef)" #formRef="ngForm">
-              <div class="row mb-3">
-                <div class="col-md-3">
-                  <label class="form-label">Project Title</label>
-                  <input required type="text" class="form-control" [(ngModel)]="project.title" name="title" required
-                    #title="ngModel" />
-                  <div *ngIf="title.invalid && title.touched" class="text-danger">
-                    * Project Title is required
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <label class="form-label">Description</label>
-                  <textarea class="form-control" rows="1" [(ngModel)]="project.description" name="description" required
-                    #desc="ngModel"></textarea>
-
-                  <div *ngIf="desc.invalid && desc.touched" class="text-danger">
-                    * Description is required
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Created By</label>
-                  <input type="text" class="form-control" [value]="userName" name="createdBy" required readonly />
-
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Project Manager</label>
-                  <input type="text" class="form-control" [(ngModel)]="project.projectManager" name="projectManager"
-                    required #pm="ngModel" />
-
-                  <div *ngIf="pm.invalid && pm.touched" class="text-danger">
-                    * Project Manager is required
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-md-3">
-                  <label class="form-label">Start Date</label>
-                  <input required type="date" class="form-control" [(ngModel)]="project.startDate" name="startDate"
-                    required id="startDate" #startDate="ngModel" />
-                  <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">
-                    * Start Date is required
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">End Date</label>
-                  <input required type="date" class="form-control" [(ngModel)]="project.endDate" name="endDate" required
-                    id="endDate" [min]="project.startDate" />
-                  <div *ngIf="project.endDate < project.startDate" class="text-danger">
-                    * End Date greater than Start Date
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Due In (Days)</label>
-                  <input required type="number" class="form-control" [(ngModel)]="project.dueDate" name="dueDate"
-                    required id="dueDate" readonly />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Team Members</label>
-                  <div class="input-group">
-                    <div class="dropdown w-100">
-                      <button class="btn dropdown-toggle shadow-sm  w-100 text-start" type="button"
-                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span>Select Team Members</span>
-                      </button>
-                      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                        style="padding: 10px; max-height: 200px; overflow-y: auto;">
-                        <li class="d-flex align-items-center" *ngFor="let member of apiService.teamMembers">
-                          <input type="checkbox" [id]="member" [value]="member" (change)="onCheckboxChange($event)"
-                            [checked]="project.teamMembers.includes(member)" class="me-2">
-                          <label [for]="member">{{ member }}</label>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div *ngIf="project.teamMembers.length == 0 && formRef.submitted" class="text-danger">
-                    * Select at least one team member
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-md-3">
-                  <label class="form-label">Priority</label>
-                  <select class="form-select" [(ngModel)]="project.status" name="status" required #status="ngModel">
-                    <option value="" disabled>Select Priority</option>
-                    <option value="High" selected>High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                  </select>
-                  <div *ngIf="status.invalid && status.touched" class="text-danger">
-                    * Priority is required
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Assigned To(TL)</label>
-                  <input type="text" class="form-control" [(ngModel)]="project.assignedTo" name="assignedTo" required
-                    #assignedTo="ngModel" />
-                  <div *ngIf="assignedTo.invalid && assignedTo.touched" class="text-danger">
-                    * Assigned To is required
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Estimate (hours)</label>
-                  <input type="number" class="form-control" [(ngModel)]="project.estimate" name="estimate" required
-                    #estimate="ngModel" />
-                  <div *ngIf="estimate.invalid && estimate.touched" class="text-danger">
-                    * Estimate is required
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Time Spent (hours)</label>
-                  <input type="number" class="form-control" [(ngModel)]="project.timeSpent" name="timeSpent" required
-                    #timeSpent="ngModel" [max]="project.estimate" />
-                  <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
-                    * Time Spent less than Estimate
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-outline-secondary border border-grey"
-                [disabled]="formRef.invalid || project.teamMembers.length==0">Create Project</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row mt-4">
-      <div class="col-md-12">
-
-        <div class="d-flex justify-content-between align-items-center">
-          <!-- Search Box -->
-          <div class="pb-1 d-flex align-items-center">
-            <div class="input-group " style="width: 400px;">
-              <input type="search" class="form-control projectsearchBox border-end-0 p-2" placeholder="Search..."
-                aria-label="Search" [(ngModel)]="searchQuery" (input)="onSearchChange()">
-              <button class="btn border btn-primary border-grey border-start-0" type="button">
-                <i class="bi bi-search "></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Sort Button -->
-          <!-- Sort Dropdown -->
-          <div class="dropdown pb-1">
-            <button class="btn  dropdown-toggle border border-grey btn-sm" type="button" id="sortDropdown"
-              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="bi bi-funnel"></i>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-              <li style="cursor: pointer;">
-                <a class="dropdown-item" (click)="onSortChange('title')">
-                  Title
-                  <span *ngIf="sortColumn === 'title'">
-                    ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
-                  </span>
-                </a>
-              </li>
-              <li style="cursor: pointer;">
-                <a class="dropdown-item" (click)="onSortChange('dueDate')">
-                  Due Days
-                  <span *ngIf="sortColumn === 'dueDate'">
-                    ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
-                  </span>
-                </a>
-              </li>
-              <li style="cursor: pointer;">
-                <a class="dropdown-item" (click)="onSortChange('status')">
-                  Priority
-                  <span *ngIf="sortColumn === 'status'">
-                    ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-
-        <!-- <div class=" table-responsive shadow mb-1">
-          <table class="table  table-bordered " [class.table-dark]="isDarkMode"
-            style="background-color: brown !important;">
-            <thead class="table-secondary ">
-              <tr class="">
-                <th>Title</th>
-                <th>Created By</th>
-                <th>Project Manager</th>
-                <th>Start Date</th>
-                <th>Due In (Days)</th>
-                <th>Team Members</th>
-                <th>Priority</th>
-                <th class="text-center">View</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let project of filteredProjects ">
-
-                <td [title]="project.title">{{ project.title }}</td>
-                <td>{{ project.createdBy }}</td>
-                <td>{{ project.projectManager }}</td>
-                <td>{{ project.startDate | date:'dd-MM-yyyy' }}</td>
-                <td>{{ project.dueDate + " Days" }}</td>
-                <td [title]="project.teamMembers">{{ project.teamMembers.length }}</td>
-                <td>
-                  <span [ngClass]="{
-                              'text-danger': project.status === 'High',
-                              'text-warning': project.status === 'Medium',
-                              'text-success': project.status === 'Low'
-                            }">
-                    {{ project.status }}
-                  </span>
-                </td>
-                <td title="View" class="text-center align-items-center " (click)="navigateToTaskComponent(project)"
-                  style="cursor: pointer;"><i class="bi bi-eye"></i></td>
-              </tr>
-            </tbody>
-          </table>
-        </div> -->
-
-        <div class=" table-responsive  mb-2 " style="height: 58vh;overflow-y: scroll;">
-          <table class="table  table-bordered m-0 p-0 text-white" [class.table-dark]="isDarkMode">
-            <thead class="sticky-top top-0">
-
-              <tr class="mb-2">
-                <th style="width: 400px; ">Project Name</th>
-                <th>Priority</th>
-                <th>Project Manager</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Due In (Days)</th>
-                <th>Team Members</th>
-                <th>Created By</th>
-                <th class="text-center">View</th>
-              </tr>
-            </thead>
-            <tbody class="" style="z-index: 0; margin-top: 0; padding: 0;">
-              <tr *ngIf="filteredProjects.length === 0">
-                <td colspan="9" class="text-center">No projects found.</td>
-              </tr>
-              <tr *ngFor="let project of filteredProjects ">
-
-
-                <td [title]="project.title">{{ project.title }}</td>
-
-                <td style="white-space: nowrap;" class="p-2 ">
-                  <span class="d-flex align-items-center border rounded-pill p-0 pe-2">
-                    <i class="bi bi-dot " [ngClass]="{
-                                  'text-danger': project.status === 'High',
-                                  'text-warning': project.status === 'Medium',
-                                  'text-success': project.status === 'Low'
-                                }" style="font-size: 2.5rem; line-height: 0.1; vertical-align: middle;"></i>
-                    <span style="margin-left: 0.1rem; margin-right: 0.2rem;">{{ project.status }}</span>
-                  </span>
-                </td>
-                <td>{{ project.projectManager }}</td>
-                <td>{{ project.startDate | date:'dd/MM/yyyy' }}</td>
-                <td>{{ project.endDate | date:'dd/MM/yyyy' }}</td>
-                <td>{{ project.dueDate + " Days" }}</td>
-                <td [title]="project.teamMembers">{{ project.teamMembers.length }} <i class="bi bi-people"></i></td>
-
-                <td>{{ project.createdBy }}</td>
-
-                <td title="View" class="text-center align-items-center " (click)="navigateToTaskComponent(project)"
-                  style="cursor: pointer;"><i class="bi bi-eye"></i></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-
-        <div class="d-flex justify-content-between align-items-center pb-1 ">
-          <div class="d-flex align-items-center d-none d-md-flex">
-            <select id="itemsPerPage" class="form-select fs-6" style="min-width: 20px"
-              (change)="onItemsPerPageChange($event)" [value]="itemsPerPage"> {{ itemsPerPage }}
-              <!-- <option value="" selected disabled></option> -->
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-            </select>
-          </div>
-          <div class="d-flex align-items-center justify-content-between ">
-            <span class="text-muted ">Page {{ page }} of {{ totalPages() }}&ensp;</span>
-            <span class="text-muted">({{ projects.length }} item{{ filteredProjects.length !== 1 ? 's' : ''
-              }})&ensp;</span>
-            <div class="d-flex align-items-center">
-              <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page - 1)" [disabled]="page === 1">
-                <i class="bi bi-chevron-left"></i>
-              </button>
-              <button class="btn btn-sm px-2" type="button">{{ page }}</button>
-              <span class="mx-2">of {{ totalPages() }}</span>
-              <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page + 1)"
-                [disabled]="page === totalPages()">
-                <i class="bi bi-chevron-right"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-    </div>
+  <div class="row">
+    <app-header [userName]="userName"></app-header>
   </div>
+  <div class="row justify-content-center mx-auto " style="max-width: 1450px; ">
+    <!-- Main Content -->
+    <div class="col-md-12  mt-5  ">
+      <div class="mb-4  pt-4">
+        <div class="float-start">
+          <h2 class="text-center me-3 colorContainer">Project Management</h2>
+          <p class="text-center ms-4">Manage your projects efficiently and effectively.</p>
+        </div>
+        <!-- modal button  -->
+        <button type="button" class="btn btn-primary float-end mt-2 p-2 createProjectbtn" data-bs-toggle="modal"
+          data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap"><i class="bi bi-plus"></i>Create
+          Project</button>
+        <!-- modal  -->
+        <div class="modal fade " id="exampleModal" aria-hidden="true" aria-labelledby="exampleModalLabel" tabindex="-1">
+          <div class="modal-dialog modal-dialog-end " style="max-width: 1100px;height: 80vh;">
+            <div class="modal-content p-0">
+              <div class="modal-header cardheader">
+                <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Create Project</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body ">
+                <div class="card shadow mx-auto cardBody">
+                  <div class="card-body">
+                    <form (ngSubmit)="onSubmit(formRef)" #formRef="ngForm">
+                      <div class="row mb-3">
+                        <div class="col-md-12 p-3">
+                          <label class="form-label">Project Name</label>
+                          <input required type="text" class="form-control" [(ngModel)]="project.title" name="title"
+                            required #title="ngModel" />
+                          <div *ngIf="title.invalid && title.touched" class="text-danger">
+                            * Project Title is required
+                          </div>
+                        </div>
+                        <div class="col-md-12 p-3">
+                          <label class="form-label">Description</label>
+                          <textarea class="form-control" rows="3" [(ngModel)]="project.description" name="description"
+                            required #desc="ngModel"></textarea>
+                          <div *ngIf="desc.invalid && desc.touched" class="text-danger">
+                            * Description is required
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Created By</label>
+                          <input type="text" disabled class="form-control" [value]="userName" name="createdBy" required
+                            readonly />
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Project Manager</label>
+                          <input type="text" class="form-control" [(ngModel)]="project.projectManager"
+                            name="projectManager" required #pm="ngModel" />
+                          <div *ngIf="pm.invalid && pm.touched" class="text-danger">
+                            * Project Manager is required
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Team Lead</label>
+                          <input type="text" class="form-control" [(ngModel)]="project.assignedTo" name="assignedTo"
+                            required #assignedTo="ngModel" />
+                          <div *ngIf="assignedTo.invalid && assignedTo.touched" class="text-danger">
+                            * Assigned To is required
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Priority</label>
+                          <select class="form-select" [(ngModel)]="project.status" name="status" required
+                            #status="ngModel">
+                            <option value="" disabled>Select Priority</option>
+                            <option value="High" selected>High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                          </select>
+                          <div *ngIf="status.invalid && status.touched" class="text-danger">
+                            * Priority is required
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Team Members</label>
+                          <div class="input-group">
+                            <div class="dropdown w-100">
+                              <button class="btn dropdown-toggle shadow-sm w-100 text-start" type="button"
+                                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span>Select Team Members</span>
+                              </button>
+                              <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
+                                style="padding: 10px; max-height: 200px; overflow-y: auto; z-index: 1000;">
+                                <li class="d-flex align-items-center lidocs "
+                                  *ngFor="let member of apiService.teamMembers">
+                                  <input type="checkbox" [id]="member" [value]="member"
+                                    (change)="onCheckboxChange($event)" [checked]="project.teamMembers.includes(member)"
+                                    class="me-2">
+                                  <label [for]="member">{{ member }}</label>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div *ngIf="project.teamMembers.length == 0 && formRef.submitted" class="text-danger">
+                            * Select at least one team member
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Start Date</label>
+                          <input required type="date" class="form-control" [(ngModel)]="project.startDate"
+                            name="startDate" required id="startDate" #startDate="ngModel" />
+                          <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">
+                            * Start Date is required
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">End Date</label>
+                          <input required type="date" class="form-control" [(ngModel)]="project.endDate" name="endDate"
+                            required id="endDate" [min]="project.startDate" />
+                          <div *ngIf="project.endDate < project.startDate" class="text-danger">
+                            * End Date greater than Start Date
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Due In (Days)</label>
+                          <input required type="number" disabled class="form-control" [(ngModel)]="project.dueDate"
+                            name="dueDate" required id="dueDate" readonly />
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Estimate (hours)</label>
+                          <input type="number" class="form-control" [(ngModel)]="project.estimate" name="estimate"
+                            required #estimate="ngModel" />
+                          <div *ngIf="estimate.invalid && estimate.touched" class="text-danger">
+                            * Estimate is required
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                          <label class="form-label">Time Spent (hours)</label>
+                          <input type="number" class="form-control" [(ngModel)]="project.timeSpent" name="timeSpent"
+                            required #timeSpent="ngModel" [max]="project.estimate" />
+                          <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
+                            * Time Spent less than Estimate
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-3 text-end">
+                        <button type="submit" class="btn btn-primary border border-grey ms-2"
+                          [disabled]="formRef.invalid || project.teamMembers.length == 0">Create Project</button>
+                        <button class="btn btn-secondary ms-2" data-bs-dismiss="modal" type="button">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Search and Sort Section table -->
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <!-- Search Box -->
+        <div class="pb-1 d-flex align-items-center">
+          <div class="input-group " style="width: 400px;">
+            <input type="search" class="form-control projectsearchBox border-end-0 p-2" placeholder="Search..."
+              aria-label="Search" [(ngModel)]="searchQuery" (input)="onSearchChange()">
+            <button class="btn border createProjectbtn border-grey border-start-0 text-white" type="button">
+              <i class="bi bi-search "></i>
+            </button>
+          </div>
+        </div>
 
 
+      </div>
+
+
+      <div class=" table-responsive  mb-2 " style="height: 58vh;overflow-y: scroll;">
+        <table class="table  table-bordered m-0 p-0 text-white border" [class.table-dark]="isDarkMode">
+          <thead class="sticky-top top-0 theadBg">
+
+            <tr class="mb-2 ">
+              <th style="width: 400px; cursor: pointer;" (click)="onSortChange('title')">
+                Project Name
+                <span *ngIf="sortColumn === 'title'">
+                  ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                </span>
+              </th>
+              <th style="cursor: pointer;" (click)="onSortChange('status')">
+                Priority
+                <span *ngIf="sortColumn === 'status'">
+                  ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                </span>
+              </th>
+              <th>Project Manager</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th style="cursor: pointer;" (click)="onSortChange('dueDate')">
+                Due In (Days)
+                <span *ngIf="sortColumn === 'dueDate'">
+                  ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                </span>
+              </th>
+              <th>Team Members</th>
+              <th>Created By</th>
+              <th class="text-center">View</th>
+            </tr>
+          </thead>
+          <tbody class="" style="z-index: 0; margin-top: 0; padding: 0;">
+            <tr *ngIf="filteredProjects.length === 0">
+              <td colspan="9" class="text-center">No projects found.</td>
+            </tr>
+            <tr *ngFor="let project of filteredProjects ">
+
+
+              <td [title]="project.title">{{ project.title }}</td>
+
+              <td style="white-space: nowrap;" class="" style="padding: 10px;">
+                <span class="d-flex align-items-center border rounded-pill p-0 px-1"
+                  style="font-size: 0.9rem; padding: 12px 6px;">
+                  <i class="bi bi-dot" [ngClass]="{
+                      'text-danger': project.status === 'High',
+                      'text-warning': project.status === 'Medium',
+                      'text-success': project.status === 'Low'
+                    }" style="font-size: 1.8rem; line-height: 0.1; vertical-align: middle;"></i>
+                  <span style="margin-left: 0.2rem; margin-right: 0.2rem;">{{ project.status }}</span>
+                </span>
+              </td>
+              <td>{{ project.projectManager }}</td>
+              <td>{{ project.startDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ project.endDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ project.dueDate + " Days" }}</td>
+              <td [title]="project.teamMembers">{{ project.teamMembers.length }} <i class="bi bi-people"></i></td>
+
+              <td>{{ project.createdBy }}</td>
+
+              <td title="View" class="text-center align-items-center " (click)="navigateToTaskComponent(project)"
+                style="cursor: pointer;"><i class="bi bi-eye"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center pb-1 ">
+        <div class="d-flex align-items-center d-none d-md-flex">
+          <select id="itemsPerPage" class="form-select fs-6" style="min-width: 20px"
+            (change)="onItemsPerPageChange($event)" [value]="itemsPerPage"> {{ itemsPerPage }}
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+        <div class="d-flex align-items-center justify-content-between ">
+          <span class="text-muted ">Page {{ page }} of {{ totalPages() }}&ensp;</span>
+          <span class="text-muted">({{ projects.length }} item{{ filteredProjects.length !== 1 ? 's' : ''
+            }})&ensp;</span>
+          <div class="d-flex align-items-center">
+            <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page - 1)" [disabled]="page === 1">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn btn-sm px-2" type="button">{{ page }}</button>
+            <span class="mx-2">of {{ totalPages() }}</span>
+            <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page + 1)"
+              [disabled]="page === totalPages()">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
 </div>

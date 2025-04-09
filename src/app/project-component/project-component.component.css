@@ -51,7 +51,12 @@ th {
 }
 
 .cardheader {
-  background-color: rgb(9, 9, 57) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 85%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important;
   color: white;
   font-weight: 400;
 }
@@ -64,4 +69,15 @@ th {
 .dropdown-menu {
   max-height: 200px;
   overflow-y: auto;
+}
+
+.createProjectbtn {
+  background: rgb(3, 1, 37);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 85%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important;
+  border: none !important;
 }

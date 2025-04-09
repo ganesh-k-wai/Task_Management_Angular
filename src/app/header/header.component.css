@@ -1,0 +1,30 @@
+.nav-light {
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 95%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important; /* Light gray background */
+  color: #f8f5f5; /* Black text */
+}
+
+.nav-light .nav-link {
+  color: #fdfdfd; /* Black text for links */
+}
+
+.nav-light .nav-link.active {
+  color: #fdfeff; /* Blue for active links */
+}
+/* Custom styles for dark mode */
+.nav-dark {
+  background-color: #343a40; /* Dark gray background */
+  color: #ffffff; /* White text */
+}
+
+.nav-dark .nav-link {
+  color: #ffffff; /* White text for links */
+}
+
+.nav-dark .nav-link.active {
+  color: #fcffff; /* Light blue for active links */
+}

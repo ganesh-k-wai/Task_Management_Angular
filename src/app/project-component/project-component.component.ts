@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { UserService } from '../user.service';
@@ -9,7 +16,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgForm } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { ToastrService } from 'ngx-toastr';
+import { Renderer2 } from '@angular/core';
 
+declare const bootstrap: any;
 @Component({
   selector: 'app-project-component',
   standalone: true,
@@ -26,6 +35,8 @@ import { ToastrService } from 'ngx-toastr';
 export class ProjectComponentComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
+  @ViewChild('exampleModal') exampleModal!: ElementRef;
+
   projects: any[] = [];
   userName: string = '';
   daysRemaining: number = 0;
@@ -79,7 +90,8 @@ export class ProjectComponentComponent
     private router: Router,
     private userService: UserService,
     public apiService: ApiService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private renderer: Renderer2
   ) {
     const darkModePreference = localStorage.getItem('darkMode');
     this.isDarkMode = darkModePreference === 'true';
@@ -126,6 +138,14 @@ export class ProjectComponentComponent
       teamMembers: [],
     });
     this.toastr.success('Project added successfully!');
+
+    const modalInstance = bootstrap.Modal.getInstance(
+      this.exampleModal.nativeElement
+    );
+    modalInstance.hide();
+
+    this.router.navigate(['/project-comp']);
+    modalInstance.Close();
   }
 
   logout() {
