@@ -143,11 +143,11 @@
         <div class="d-flex justify-content-between align-items-center">
           <!-- Search Box -->
           <div class="pb-1 d-flex align-items-center">
-            <div class="input-group w-100">
-              <input type="search" class="form-control projectsearchBox border-end-0" placeholder="Search..."
+            <div class="input-group " style="width: 400px;">
+              <input type="search" class="form-control projectsearchBox border-end-0 p-2" placeholder="Search..."
                 aria-label="Search" [(ngModel)]="searchQuery" (input)="onSearchChange()">
-              <button class="btn border border-grey border-start-0" type="button">
-                <i class="bi bi-search"></i>
+              <button class="btn border btn-primary border-grey border-start-0" type="button">
+                <i class="bi bi-search "></i>
               </button>
             </div>
           </div>
@@ -189,7 +189,7 @@
         </div>
 
 
-        <div class=" table-responsive shadow mb-1">
+        <!-- <div class=" table-responsive shadow mb-1">
           <table class="table  table-bordered " [class.table-dark]="isDarkMode"
             style="background-color: brown !important;">
             <thead class="table-secondary ">
@@ -227,14 +227,64 @@
               </tr>
             </tbody>
           </table>
+        </div> -->
+
+        <div class=" table-responsive  mb-2 " style="height: 58vh;overflow-y: scroll;">
+          <table class="table  table-bordered m-0 p-0 text-white" [class.table-dark]="isDarkMode">
+            <thead class="sticky-top top-0">
+
+              <tr class="mb-2">
+                <th style="width: 400px; ">Project Name</th>
+                <th>Priority</th>
+                <th>Project Manager</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Due In (Days)</th>
+                <th>Team Members</th>
+                <th>Created By</th>
+                <th class="text-center">View</th>
+              </tr>
+            </thead>
+            <tbody class="" style="z-index: 0; margin-top: 0; padding: 0;">
+              <tr *ngIf="filteredProjects.length === 0">
+                <td colspan="9" class="text-center">No projects found.</td>
+              </tr>
+              <tr *ngFor="let project of filteredProjects ">
+
+
+                <td [title]="project.title">{{ project.title }}</td>
+
+                <td style="white-space: nowrap;" class="p-2 ">
+                  <span class="d-flex align-items-center border rounded-pill p-0 pe-2">
+                    <i class="bi bi-dot " [ngClass]="{
+                                  'text-danger': project.status === 'High',
+                                  'text-warning': project.status === 'Medium',
+                                  'text-success': project.status === 'Low'
+                                }" style="font-size: 2.5rem; line-height: 0.1; vertical-align: middle;"></i>
+                    <span style="margin-left: 0.1rem; margin-right: 0.2rem;">{{ project.status }}</span>
+                  </span>
+                </td>
+                <td>{{ project.projectManager }}</td>
+                <td>{{ project.startDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ project.endDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ project.dueDate + " Days" }}</td>
+                <td [title]="project.teamMembers">{{ project.teamMembers.length }} <i class="bi bi-people"></i></td>
+
+                <td>{{ project.createdBy }}</td>
+
+                <td title="View" class="text-center align-items-center " (click)="navigateToTaskComponent(project)"
+                  style="cursor: pointer;"><i class="bi bi-eye"></i></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
 
         <div class="d-flex justify-content-between align-items-center pb-1 ">
           <div class="d-flex align-items-center d-none d-md-flex">
             <select id="itemsPerPage" class="form-select fs-6" style="min-width: 20px"
-              (change)="onItemsPerPageChange($event)">
-              <option value="" selected disabled></option>
+              (change)="onItemsPerPageChange($event)" [value]="itemsPerPage"> {{ itemsPerPage }}
+              <!-- <option value="" selected disabled></option> -->
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="15">15</option>
@@ -242,9 +292,9 @@
             </select>
           </div>
           <div class="d-flex align-items-center justify-content-between ">
-            <span class="text-muted ">Page {{ page }} of {{ totalPages() }}</span>
+            <span class="text-muted ">Page {{ page }} of {{ totalPages() }}&ensp;</span>
             <span class="text-muted">({{ projects.length }} item{{ filteredProjects.length !== 1 ? 's' : ''
-              }})</span>
+              }})&ensp;</span>
             <div class="d-flex align-items-center">
               <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page - 1)" [disabled]="page === 1">
                 <i class="bi bi-chevron-left"></i>
@@ -264,10 +314,5 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <!-- <footer class="footer py-2" style="background-color: whitesmoke;">
-        <div class="container text-center">
-            <span class="text-muted">Task Management System</span>
-        </div>
-    </footer> -->
+
 </div>

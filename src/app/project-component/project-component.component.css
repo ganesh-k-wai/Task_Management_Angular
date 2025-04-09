@@ -28,3 +28,40 @@
   box-shadow: none !important;
   border-color: #dad4ce !important;
 }
+
+/* ------------updated */
+
+.colorContainer {
+  color: rgb(5, 5, 66);
+}
+
+.btn {
+  /* background-color: rgb(5, 5, 66) !important; */
+}
+
+th {
+  background-color: rgb(9, 9, 57) !important;
+  color: white;
+  font-weight: 400;
+}
+
+td,
+th {
+  padding-left: 15px;
+}
+
+.cardheader {
+  background-color: rgb(9, 9, 57) !important;
+  color: white;
+  font-weight: 400;
+}
+
+.modal-body {
+  background-color: rgba(5, 5, 66, 0.1) !important;
+  font-size: 14px;
+}
+
+.dropdown-menu {
+  max-height: 200px;
+  overflow-y: auto;
+}

@@ -39,7 +39,7 @@ export class ProjectComponentComponent
   }
   // For pagination
   page: number = 1;
-  itemsPerPage: number = 2;
+  itemsPerPage: number = 10;
   totalItems: number = 0;
 
   // For searching and sorting
@@ -224,6 +224,8 @@ export class ProjectComponentComponent
 
   onItemsPerPageChange(event: any) {
     this.itemsPerPage = parseInt(event.target.value, 10);
+    localStorage.setItem('itemsPerPage', this.itemsPerPage.toString());
+
     this.page = 1;
     this.applyFilters();
   }
