@@ -9,6 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgForm } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { ToastrService } from 'ngx-toastr';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-project-component',
@@ -26,8 +27,6 @@ import { ToastrService } from 'ngx-toastr';
 export class ProjectComponentComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  isModalOpen: boolean = false;
-
   projects: any[] = [];
   userName: string = '';
   daysRemaining: number = 0;
@@ -109,13 +108,15 @@ export class ProjectComponentComponent
     this.projects = this.apiService.getProjects();
     this.applyFilters();
   }
-  openModal() {
-    this.isModalOpen = true;
-  }
 
   closeModal() {
-    this.isModalOpen = false;
+    const modalEl = document.getElementById('exampleModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
   }
+
   onSubmit(formRef: NgForm) {
     if (formRef.invalid) {
       Object.keys(formRef.controls).forEach((field) => {
@@ -135,7 +136,6 @@ export class ProjectComponentComponent
     });
     this.toastr.success('Project added successfully!');
     this.closeModal();
-
     this.router.navigate(['/project-comp']);
   }
 
@@ -236,7 +236,6 @@ export class ProjectComponentComponent
   onItemsPerPageChange(event: any) {
     this.itemsPerPage = parseInt(event.target.value, 10);
     localStorage.setItem('itemsPerPage', this.itemsPerPage.toString());
-
     this.page = 1;
     this.applyFilters();
   }
@@ -330,6 +329,6 @@ export class ProjectComponentComponent
     const startIndex = (this.page - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.filteredProjects = filteredProjects.slice(startIndex, endIndex);
-    console.log('Filtered projects: ', this.filteredProjects);
+    // console.log('Filtered projects: ', this.filteredProjects);
   }
 }

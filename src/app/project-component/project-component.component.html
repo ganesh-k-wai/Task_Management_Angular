@@ -142,7 +142,8 @@
                       </div>
                       <div class="mb-3 text-end">
                         <button type="submit" class="btn btn-primary border border-grey ms-2"
-                          [disabled]="formRef.invalid || project.teamMembers.length == 0">Create Project</button>
+                          [disabled]="formRef.invalid || project.teamMembers.length == 0" (click)="closeModal()">Create
+                          Project</button>
                         <button class="btn btn-secondary ms-2" data-bs-dismiss="modal" type="button">Cancel</button>
                       </div>
                     </form>
@@ -172,7 +173,7 @@
       </div>
 
 
-      <div class=" table-responsive  mb-2 " style="height: 58vh;overflow-y: scroll;">
+      <div class=" table-responsive  mb-2 border" style="height: 58vh;overflow-y: scroll;">
         <table class="table  table-bordered m-0 p-0 text-white border" [class.table-dark]="isDarkMode">
           <thead class="sticky-top top-0 theadBg">
 

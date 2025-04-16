@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-task-component',
   imports: [FormsModule, CommonModule, RouterModule, HeaderComponent],
@@ -27,7 +29,7 @@ export class TaskComponentComponent implements OnInit {
 
   // For pagination
   page: number = 1;
-  itemsPerPage: number = 1;
+  itemsPerPage: number = 10;
   totalItems: number = 0;
 
   // For searching and sorting
@@ -48,7 +50,6 @@ export class TaskComponentComponent implements OnInit {
     this.loadProjectDetails();
     this.loadTasks();
     this.loadCurrentUser();
-    console.log();
   }
 
   loadProjectDetails() {
@@ -78,25 +79,34 @@ export class TaskComponentComponent implements OnInit {
       this.deleteProject();
     }
   }
-  editProject() {
-    this.isEditing = true;
-    this.editedProject = { ...this.project };
-  }
-  cancelEdit() {
-    this.isEditing = false;
-    this.editedProject = { ...this.project };
-  }
+  // editProject() {
+  //   this.isEditing = true;
+  //   this.editedProject = { ...this.project };
+  // }
+  // cancelEdit() {
+  //   this.isEditing = false;
+  //   this.editedProject = { ...this.project };
+  // }
 
   deleteProject() {
     this.apiService.deleteProject(this.projectId);
     this.router.navigate(['/project-comp']);
   }
+  closeModal() {
+    const modalEl = document.getElementById('exampleModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
 
   saveProject() {
     this.apiService.updateProject(this.projectId, this.editedProject);
-    console.log(this.editProject);
+    // console.log(this.editProject);
 
-    this.isEditing = false;
+    // this.isEditing = false;
+    this.closeModal();
+
     this.loadProjectDetails();
     this.toastr.success('Project updated successfully!');
   }
@@ -108,12 +118,27 @@ export class TaskComponentComponent implements OnInit {
   daysRemaining: number = 0;
   intervalId: any;
   teamMembers: any[] = [];
-  selectedTeamMembers: any[] = [];
+  selectedTeamMembers: any[] = []; //total project selected team
 
-  selectedTaskTeamMembers: any[] = [];
-  selectedTaskMembers: string[] = [];
+  selectedTaskTeamMembers: any[] = []; //empty array for store team members while create task and edit task for selection
+  selectedTaskMembers: string[] = []; //edit form member
 
   infinityValue: number = Infinity;
+
+  closeTaskModal() {
+    const modalEl = document.getElementById('taskModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
+  closeeditTaskModal() {
+    const modalEl = document.getElementById('editTaskModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
 
   addTask(taskForm: any) {
     const task = {
@@ -126,7 +151,7 @@ export class TaskComponentComponent implements OnInit {
       description: taskForm.value.taskDescription,
     };
     this.apiService.addTask(this.projectId, task);
-
+    this.closeTaskModal();
     this.loadTasks();
     taskForm.reset();
     this.selectedTaskMembers = [];
@@ -137,21 +162,25 @@ export class TaskComponentComponent implements OnInit {
   loadTasks() {
     this.tasks = this.apiService.getTasksByProjectId(this.projectId);
     this.applyTaskFilters();
+    console.log('this.selectedTeamMembers', this.selectedTeamMembers);
+    console.log('this.selectedTaskTeamMembers', this.selectedTaskTeamMembers);
+    console.log('this.selectedTaskMembers', this.selectedTaskMembers);
   }
 
   saveTask(taskForm: any) {
     const updatedTask = {
       task_id: this.currentTask.task_id,
       title: taskForm.value.taskTitle,
-      assignedTo: [...this.selectedTaskTeamMembers],
+      assignedTo: [...this.selectedTaskMembers],
       taskStatus: taskForm.value.taskStatus,
       taskEstimate: taskForm.value.taskEstimate,
       timeSpent: taskForm.value.timeSpent,
       description: taskForm.value.taskDescription,
     };
     this.apiService.updateTask(this.projectId, updatedTask);
-    this.isEditingTask = false;
+    // this.isEditingTask = false;
     this.loadTasks();
+    this.closeeditTaskModal();
     this.selectedTaskTeamMembers = [];
     this.toastr.success('Task updated successfully!');
   }
@@ -171,6 +200,7 @@ export class TaskComponentComponent implements OnInit {
     if (confirmed) {
       this.apiService.deleteTask(this.projectId, taskId);
       this.loadTasks();
+      this.toastr.success('Task Deleted successfully!');
     }
   }
   // team members
@@ -190,18 +220,17 @@ export class TaskComponentComponent implements OnInit {
 
   onTaskMemberChange(event: any) {
     const member = event.target.value;
-    // console.log('Selected member:', member);
-    console.log('Selected members:', this.selectedTaskTeamMembers);
     if (event.target.checked) {
-      if (!this.selectedTaskTeamMembers.includes(member)) {
-        this.selectedTaskTeamMembers.push(member);
+      if (!this.selectedTaskMembers.includes(member)) {
+        this.selectedTaskMembers.push(member);
       }
     } else {
-      const index = this.selectedTaskTeamMembers.indexOf(member);
+      const index = this.selectedTaskMembers.indexOf(member);
       if (index > -1) {
-        this.selectedTaskTeamMembers.splice(index, 1);
+        this.selectedTaskMembers.splice(index, 1);
       }
     }
+    console.log('Updated Selected Task Members:', this.selectedTaskMembers);
   }
 
   // date
@@ -247,6 +276,7 @@ export class TaskComponentComponent implements OnInit {
 
   onTaskItemsPerPageChange(event: any) {
     this.itemsPerPage = parseInt(event.target.value, 10);
+    localStorage.setItem('itemsPerPage', this.itemsPerPage.toString());
     this.page = 1;
     this.applyTaskFilters();
   }

@@ -2,3 +2,93 @@
   box-shadow: none !important;
   border-color: #dad4ce !important;
 }
+
+.cardheader {
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 85%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important;
+  color: white;
+  font-weight: 400;
+}
+
+.modal-body {
+  background-color: rgba(5, 5, 66, 0.1) !important;
+  font-size: 14px;
+}
+
+.dropdown-menu {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.createProjectbtn {
+  background: rgb(3, 1, 37);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 85%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important;
+  border: none !important;
+}
+
+.btn-outline-warning:hover {
+  background: rgb(3, 1, 37);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 85%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important;
+  color: white !important;
+}
+.btn-outline-danger:hover {
+  background: rgb(3, 1, 37);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 85%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important;
+  color: white !important;
+}
+
+.createTaskbtn {
+  background: rgb(3, 1, 37);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 50%,
+    rgba(49, 152, 187, 1) 85%,
+    rgba(0, 212, 255, 1) 100%
+  ) !important;
+  border: none !important;
+  color: white;
+}
+
+.btn-shine {
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  background: linear-gradient(to right, #070707 0, white 100%, #6e6e6e 20%);
+  background-position: 0;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 7s infinite linear;
+  animation-fill-mode: forwards;
+  -webkit-text-size-adjust: none;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+@keyframes shine {
+  0% {
+    background-position: 0px;
+  }
+
+  100% {
+    background-position: 300px;
+  }
+}
