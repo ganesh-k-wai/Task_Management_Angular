@@ -232,8 +232,26 @@
 
               <td>{{ project.createdBy }}</td>
 
-              <td title="View" class="text-center align-items-center " (click)="navigateToTaskComponent(project)"
-                style="cursor: pointer;"><i class="bi bi-eye"></i></td>
+              <td class="text-center align-items-center" style="cursor: pointer;">
+                <div class="dropdown">
+                  <button class="btn  border-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li>
+                      <button type="button" class="btn  border-0 px-2 py-1" data-bs-toggle="modal"
+                      title="Edit" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+                      &nbsp;&nbsp;Edit Project</button>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" (click)="confirmDelete(project.project_Id)">Delete Project</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" (click)="navigateToTaskComponent(project)">View</a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>

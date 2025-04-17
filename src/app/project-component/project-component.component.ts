@@ -95,6 +95,7 @@ export class ProjectComponentComponent
     this.startLiveDaysRemaining();
   }
 
+
   getUserName() {
     const currentUser = this.apiService.getCurrentUser();
     if (currentUser && currentUser.user_name) {
@@ -330,5 +331,19 @@ export class ProjectComponentComponent
     const endIndex = startIndex + this.itemsPerPage;
     this.filteredProjects = filteredProjects.slice(startIndex, endIndex);
     // console.log('Filtered projects: ', this.filteredProjects);
+    
+    
   }
+
+
+  confirmDelete(projectId: string) {
+
+    if (confirm('Are you sure ?')) {
+      this.apiService.deleteProject(projectId);
+      this.loadProjects();
+      this.toastr.success('Project deleted successfully!');
+    }
+  }
+  
+
 }

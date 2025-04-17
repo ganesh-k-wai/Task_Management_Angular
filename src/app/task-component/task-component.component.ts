@@ -22,6 +22,7 @@ export class TaskComponentComponent implements OnInit {
   tasks: any[] = [];
   userName: string = '';
   isEditing: boolean = false;
+  isCreateTask : boolean = false;
   editedProject: any = {};
 
   filteredTasks: any[] = [];
@@ -104,7 +105,7 @@ export class TaskComponentComponent implements OnInit {
     this.apiService.updateProject(this.projectId, this.editedProject);
     // console.log(this.editProject);
 
-    // this.isEditing = false;
+    this.isEditing = false;
     this.closeModal();
 
     this.loadProjectDetails();
@@ -125,7 +126,11 @@ export class TaskComponentComponent implements OnInit {
 
   infinityValue: number = Infinity;
 
+  selectedMembers: string[] = []; // Unified array for selected team members
+
   closeTaskModal() {
+    this.selectedMembers = []; 
+    this.currentTask = {}; 
     const modalEl = document.getElementById('taskModal');
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
     if (modalInstance) {
@@ -139,12 +144,13 @@ export class TaskComponentComponent implements OnInit {
       modalInstance.hide();
     }
   }
+  
 
   addTask(taskForm: any) {
     const task = {
       task_id: this.generateUniqueId(),
       title: taskForm.value.taskTitle,
-      assignedTo: [...this.selectedTaskTeamMembers],
+      assignedTo: [...this.selectedMembers],
       taskStatus: taskForm.value.taskStatus || 'New',
       taskEstimate: taskForm.value.taskEstimate,
       timeSpent: taskForm.value.timeSpent,
@@ -154,8 +160,7 @@ export class TaskComponentComponent implements OnInit {
     this.closeTaskModal();
     this.loadTasks();
     taskForm.reset();
-    this.selectedTaskMembers = [];
-    console.log(this.selectedTaskMembers);
+    this.selectedMembers = []; // Reset selected members
     this.toastr.success('Task added successfully!');
   }
 
@@ -164,34 +169,34 @@ export class TaskComponentComponent implements OnInit {
     this.applyTaskFilters();
     console.log('this.selectedTeamMembers', this.selectedTeamMembers);
     console.log('this.selectedTaskTeamMembers', this.selectedTaskTeamMembers);
-    console.log('this.selectedTaskMembers', this.selectedTaskMembers);
+    console.log('this.selectedMembers', this.selectedMembers);
   }
 
   saveTask(taskForm: any) {
     const updatedTask = {
       task_id: this.currentTask.task_id,
       title: taskForm.value.taskTitle,
-      assignedTo: [...this.selectedTaskMembers],
+      assignedTo: [...this.selectedMembers],
       taskStatus: taskForm.value.taskStatus,
       taskEstimate: taskForm.value.taskEstimate,
       timeSpent: taskForm.value.timeSpent,
       description: taskForm.value.taskDescription,
     };
     this.apiService.updateTask(this.projectId, updatedTask);
-    // this.isEditingTask = false;
+    this.isEditingTask = false;
     this.loadTasks();
     this.closeeditTaskModal();
-    this.selectedTaskTeamMembers = [];
+    this.selectedMembers = [];
     this.toastr.success('Task updated successfully!');
   }
 
   cancelEditTask() {
-    this.isEditingTask = false;
+    // this.isEditingTask = false;
     this.currentTask = {};
     this.selectedTaskTeamMembers = [];
   }
   editTask(task: any) {
-    this.isEditingTask = true;
+    // this.isEditingTask = true;
     this.currentTask = { ...task };
     this.selectedTaskMembers = [...task.assignedTo];
   }
@@ -221,16 +226,16 @@ export class TaskComponentComponent implements OnInit {
   onTaskMemberChange(event: any) {
     const member = event.target.value;
     if (event.target.checked) {
-      if (!this.selectedTaskMembers.includes(member)) {
-        this.selectedTaskMembers.push(member);
+      if (!this.selectedMembers.includes(member)) {
+        this.selectedMembers.push(member);
       }
     } else {
-      const index = this.selectedTaskMembers.indexOf(member);
+      const index = this.selectedMembers.indexOf(member);
       if (index > -1) {
-        this.selectedTaskMembers.splice(index, 1);
+        this.selectedMembers.splice(index, 1);
       }
     }
-    console.log('Updated Selected Task Members:', this.selectedTaskMembers);
+    console.log('Updated Selected Task Members:', this.selectedMembers);
   }
 
   // date

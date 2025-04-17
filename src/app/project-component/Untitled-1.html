@@ -1,0 +1,306 @@
+<!-- Edit Task Form -->
+            <!-- <div *ngIf="isEditingTask" class="card mb-3 shadow">
+                <div class="card-header">
+                    <h5>Edit Task</h5>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="saveTask(taskForm)" #taskForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="taskTitle"> Title</label>
+                                <input type="text" id="taskTitle" name="taskTitle" class="form-control"
+                                    [(ngModel)]="currentTask.title" required #taskTitle="ngModel">
+                                <div *ngIf="taskTitle.invalid && taskTitle.touched" class="text-danger">
+                                    * Task Title is required
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="">Task Assigned To</label>
+                                <div class="input-group">
+                                    <div class="dropdown w-100">
+                                        <button class="btn dropdown-toggle border border-grey w-100 text-start"
+                                            type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Select Team Members
+                                        </button>
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
+                                            style="padding: 10px; max-height: 200px; overflow-y: auto;">
+                                            <li class="d-flex align-items-center" *ngFor="let member of teamMembers">
+                                                <input type="checkbox" [id]="member" [value]="member" name="assignedTo"
+                                                    (change)="onTaskMemberChange($event)"
+                                                    [checked]="selectedTaskMembers.includes(member)" class="me-2">
+                                                <label [for]="member">{{ member }}</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div *ngIf="taskForm.submitted && selectedTaskTeamMembers.length === 0"
+                                    class="text-danger">
+                                    * Select at least one team member
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="status"> Status</label>
+                                <select id="status" name="taskStatus" class="form-control"
+                                    [(ngModel)]="currentTask.taskStatus" required>
+                                    <option value="New">New</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="taskDescription">Description</label>
+                                <textarea id="taskDescription" name="taskDescription" class="form-control"
+                                    [(ngModel)]="currentTask.description" required
+                                    #taskDescription="ngModel"></textarea>
+                                <div *ngIf="taskDescription.invalid && taskDescription.touched" class="text-danger">
+                                    * Task Description is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="estimate">Estimate (hours)</label>
+                                <input type="number" id="estimate" name="taskEstimate" class="form-control"
+                                    [(ngModel)]="currentTask.taskEstimate" required #taskEstimate="ngModel">
+                                <div *ngIf="taskEstimate.invalid && taskEstimate.touched" class="text-danger">
+                                    * Estimate Greater than Time Spent
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="timeSpent">Time Spent (hours)</label>
+                                <input type="number" id="timeSpent" name="timeSpent" class="form-control"
+                                    [(ngModel)]="currentTask.timeSpent" required #timeSpent="ngModel"
+                                    [max]="currentTask.taskEstimate">
+                                <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
+                                    * Time Spent less than Estimate
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Save Task</button>
+                        <button type="button" class="btn btn-outline-secondary ms-2"
+                            (click)="cancelEditTask()">Cancel</button>
+                    </form>
+                </div>
+            </div> -->
+            <!-- edit task  start-->
+
+
+
+
+
+             <!-- Create Task Form -->
+            <!-- <div *ngIf="!isEditingTask" class="card mb-3 shadow">
+                <div class="card-header">
+                    <h5>Create Task</h5>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="addTask(taskForm)" #taskForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="taskTitle"> Title</label>
+                                <input type="text" id="taskTitle" name="taskTitle" class="form-control" ngModel required
+                                    #taskTitle="ngModel">
+                                <div *ngIf="taskTitle.invalid && taskTitle.touched" class="text-danger">
+                                    * Task Title is required
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="">Task Assigned To</label>
+                                <div class="input-group">
+                                    <div class="dropdown w-100">
+                                        <button class="btn dropdown-toggle border border-grey w-100 text-start"
+                                            type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Select Team Members
+                                        </button>
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
+                                            style="padding: 10px; max-height: 200px; overflow-y: auto;">
+                                            <li class="d-flex align-items-center" *ngFor="let member of teamMembers">
+                                                <input type="checkbox" [id]="member" [value]="member" name="assignedTo"
+                                                    (change)="onTaskMemberChange($event)"
+                                                    [checked]="selectedTaskTeamMembers.includes(member)" class="me-2">
+                                                <label [for]="member">{{ member }}</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div *ngIf="taskForm.submitted && selectedTaskTeamMembers.length === 0"
+                                    class="text-danger">
+                                    * Select at least one team member
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="status"> Status</label>
+                                <select id="status" name="taskStatus" class="form-control" ngModel required>
+                                    <option value="New" selected>New</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="taskDescription"> Description</label>
+                                <textarea id="taskDescription" name="taskDescription" class="form-control" ngModel
+                                    required #taskDescription="ngModel"></textarea>
+                                <div *ngIf="taskDescription.invalid && taskDescription.touched" class="text-danger">
+                                    * Task Description is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="estimate">Estimate (hours)</label>
+                                <input type="number" id="estimate" name="taskEstimate" class="form-control" ngModel
+                                    required #taskEstimate="ngModel">
+                                <div *ngIf="taskEstimate.invalid && taskEstimate.touched" class="text-danger">
+                                    * Estimate Greater than Time Spent
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="timeSpent">Time Spent (hours)</label>
+                                <input type="number" id="timeSpent" name="timeSpent" class="form-control" ngModel
+                                    required #timeSpent="ngModel" [max]="taskEstimate?.value">
+                                <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
+                                    * Time Spent less than Estimate
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark"
+                            [disabled]="taskForm.invalid || selectedTaskTeamMembers.length === 0">
+                            Add Task</button>
+                    </form>
+                </div>
+            </div> -->
+
+             <!-- Edit Project Form -->
+            <!-- <div *ngIf="isEditing" class="card mb-3 shadow">
+                <div class="card-header">
+                    <h5>Edit Project</h5>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="saveProject()">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="createdBy">Created By</label>
+                                <input type="text" disabled id="createdBy" [(ngModel)]="editedProject.createdBy
+                                " name="createdBy" class="form-control" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="projectTitle">Project Title</label>
+                                <input type="text" id="projectTitle" [(ngModel)]="editedProject.title" name="title"
+                                    class="form-control" required #title="ngModel" />
+                                <div *ngIf="title.invalid && title.touched" class="text-danger">
+                                    * Project Title is required
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="projectManager">Project Manager</label>
+                                <input type="text" id="projectManager" [(ngModel)]="editedProject.projectManager"
+                                    name="projectManager" class="form-control" required #pm="ngModel">
+                                <div *ngIf="pm.invalid && pm.touched" class="text-danger">
+                                    * Project Manager is required
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label for="projectDescription">Project Description</label>
+                                <textarea id="projectDescription" [(ngModel)]="editedProject.description"
+                                    name="description" class="form-control" required #desc="ngModel"></textarea>
+                                <div *ngIf="desc.invalid && desc.touched" class="text-danger">
+                                    * Description is required
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="projectManager">Priority</label>
+                                <select class="form-select" [(ngModel)]="editedProject.status" name="status" required
+                                    #status="ngModel">
+                                    <option value="High" selected>High</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Low">Low</option>
+                                </select>
+                                <div *ngIf="status.invalid && status.touched" class="text-danger">
+                                    * Priority is required
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="projectManager">Assigned To</label>
+                                <input type="text" id="projectManager" [(ngModel)]="editedProject.
+                                assignedTo" name="assignedTo" class="form-control" required #assignedTo="ngModel">
+                                <div *ngIf="assignedTo.invalid && assignedTo.touched" class="text-danger">
+                                    * Assigned To is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="startDate">Start Date</label>
+                                <input type="date" id="startDate" [(ngModel)]="editedProject.startDate" name="startDate"
+                                    (change)="onStartDateChange()" class="form-control" required #startDate="ngModel">
+                                <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">
+                                    * Start Date is required
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="endDate">End Date</label>
+                                <input type="date" id="endDate" [(ngModel)]="editedProject.endDate" name="endDate"
+                                    [min]="editedProject.startDate" (change)="onEndDateChange()" class="form-control"
+                                    required>
+                                <div *ngIf="project.endDate < project.startDate" class="text-danger">
+                                    * End Date greater than Start Date
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="endDate">Due In</label>
+                                <input type="number" id="dueDate" [(ngModel)]="editedProject.dueDate" name="dueDate"
+                                    class="form-control" required readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="">Team Members</label>
+                                <div class="input-group">
+                                    <div class="dropdown w-100">
+                                        <button class="btn dropdown-toggle border border-grey w-100 text-start"
+                                            type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Select Team Members
+                                        </button>
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
+                                            style="padding: 10px; max-height: 200px; overflow-y: auto;">
+                                            <li class="d-flex align-items-center"
+                                                *ngFor="let member of apiService.teamMembers">
+                                                <input type="checkbox" [id]="member" [value]="member"
+                                                    (change)="onCheckboxChange($event)"
+                                                    [checked]="project.teamMembers.includes(member)" class="me-2">
+                                                <label [for]="member">{{ member }}</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div *ngIf="project.teamMembers.length == 0 " class="text-danger">
+                                    * Select at least one team member
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 mb-3">
+                                <label for="endDate">Est Time(H)</label>
+                                <input type="number" id="" [(ngModel)]="editedProject.estimate" name="estimate"
+                                    class="form-control" required #estimate="ngModel" [max]="editedProject.timeSpent">
+                                <div *ngIf="estimate.invalid && estimate.touched" class="text-danger">
+                                    * Estimate Greater than Time Spent
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="endDate">Spt Time(h)</label>
+                                <input type="number" id="" [(ngModel)]="editedProject.timeSpent" name="timeSpent"
+                                    class="form-control" [max]="editedProject.estimate" required #timeSpent="ngModel">
+                                <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
+                                    * Time Spent less than Estimate
+                                </div>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Save</button>
+                        <button type="button" class="btn btn-outline-secondary ms-2"
+                            (click)="cancelEdit()">Cancel</button>
+                    </form>
+                </div>
+            </div> -->
