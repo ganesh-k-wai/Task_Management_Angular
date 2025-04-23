@@ -108,10 +108,19 @@ export class ProjectComponentComponent
   loadProjects() {
     this.projects = this.apiService.getProjects();
     this.applyFilters();
+
+    
   }
 
   closeModal() {
     const modalEl = document.getElementById('exampleModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
+  closeeditModal() {
+    const modalEl = document.getElementById('EditProjectModal');
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
     if (modalInstance) {
       modalInstance.hide();
@@ -344,6 +353,34 @@ export class ProjectComponentComponent
       this.toastr.success('Project deleted successfully!');
     }
   }
+
   
+  editedProject: any = {};
+
+
+
+
+  editProject(projectID: string) {
+    console.log(projectID)
+    this.project = this.apiService.getProjectById(projectID);
+    this.editedProject = { ...this.project };
+
+    if (this.editedProject.startDate && this.editedProject.endDate) {
+      const startDate = new Date(this.editedProject.startDate);
+      const endDate = new Date(this.editedProject.endDate);
+      this.calculateDueInDays(startDate, endDate); // Reuse the existing method
+    }
+    
+    this.loadProjects();
+
+  }
+
+  
+  saveProject(){
+    this.apiService.updateProject(this.editedProject.project_Id, this.editedProject);
+    this.loadProjects();
+    this.toastr.success('Project updated successfully!');
+    this.closeeditModal();
+  }
 
 }
