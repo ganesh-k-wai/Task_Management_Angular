@@ -81,3 +81,31 @@ th {
   ) !important;
   border: none !important;
 }
+
+
+/* btn animation  */
+
+.btn-shine {
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  background: linear-gradient(to right, #070707 0, white 100%, #6e6e6e 20%);
+  background-position: 0;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 7s infinite linear;
+  animation-fill-mode: forwards;
+  -webkit-text-size-adjust: none;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+@keyframes shine {
+  0% {
+    background-position: 0px;
+  }
+
+  100% {
+    background-position: 300px;
+  }
+}

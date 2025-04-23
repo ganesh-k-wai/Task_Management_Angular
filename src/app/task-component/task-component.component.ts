@@ -30,7 +30,7 @@ export class TaskComponentComponent implements OnInit {
 
   // For pagination
   page: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 5;
   totalItems: number = 0;
 
   // For searching and sorting

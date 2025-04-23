@@ -1,0 +1,274 @@
+   <!-- Project Details  -->
+            <!-- <h5>Project Details:</h5> -->
+            <div  class="card mb-3 shadow">
+                <div class="card-header d-flex justify-content-between p-0">
+                    <div class="d-flex align-items-center">
+                        <h5 class="mb-0 ps-2">Project Details:</h5>
+                        <!-- <h6 class="mb-0 ms-2 fs-5">{{ project.title }}</h6>  -->
+                    </div>
+
+                    <div class="d-flex">
+
+                        <!-- modal btn  -->
+                        <button type="button" class="btn my-3 createTaskbtn me-2" data-bs-toggle="modal"
+                            data-bs-target="#taskModal">
+                            <i class="bi bi-plus"></i> <span class="btn-shine">Create Task</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-warning border-0 px-2 py-1" data-bs-toggle="modal"
+                            title="Edit" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+                            <i class="bi bi-pencil"></i></button>
+
+                        <!-- modal edit project -->
+                        <div class="modal fade " id="exampleModal" aria-hidden="true"
+                            aria-labelledby="exampleModalLabel" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-end " style="max-width: 1100px;height: 80vh;">
+                                <div class="modal-content p-0">
+                                    <div class="modal-header cardheader">
+                                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Edit Project</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body ">
+                                        <div class="card shadow mx-auto cardBody">
+                                            <div class="card-body">
+                                                <form (ngSubmit)="saveProject()" #formRef="ngForm">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12 p-3">
+                                                            <label class="form-label">Project Name</label>
+                                                            <input required type="text" class="form-control"
+                                                                [(ngModel)]="editedProject.title" name="title" required
+                                                                #title="ngModel" />
+                                                            <div *ngIf="title.invalid && title.touched"
+                                                                class="text-danger">
+                                                                * Project Title is required
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 p-3">
+                                                            <label class="form-label">Description</label>
+                                                            <textarea class="form-control" rows="3"
+                                                                [(ngModel)]="editedProject.description"
+                                                                name="description" required #desc="ngModel"></textarea>
+                                                            <div *ngIf="desc.invalid && desc.touched"
+                                                                class="text-danger">
+                                                                * Description is required
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Created By</label>
+                                                            <input type="text" disabled class="form-control"
+                                                                [value]="userName" name="createdBy" required readonly />
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Project Manager</label>
+                                                            <input type="text" class="form-control"
+                                                                [(ngModel)]="editedProject.projectManager"
+                                                                name="projectManager" required #pm="ngModel" />
+                                                            <div *ngIf="pm.invalid && pm.touched" class="text-danger">
+                                                                * Project Manager is required
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Team Lead</label>
+                                                            <input type="text" class="form-control"
+                                                                [(ngModel)]="editedProject.assignedTo" name="assignedTo"
+                                                                required #assignedTo="ngModel" />
+                                                            <div *ngIf="assignedTo.invalid && assignedTo.touched"
+                                                                class="text-danger">
+                                                                * Assigned To is required
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Priority</label>
+                                                            <select class="form-select"
+                                                                [(ngModel)]="editedProject.status" name="status"
+                                                                required #status="ngModel">
+                                                                <option value="" disabled>Select Priority</option>
+                                                                <option value="High" selected>High</option>
+                                                                <option value="Medium">Medium</option>
+                                                                <option value="Low">Low</option>
+                                                            </select>
+                                                            <div *ngIf="status.invalid && status.touched"
+                                                                class="text-danger">
+                                                                * Priority is required
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Team Members</label>
+                                                            <div class="input-group">
+                                                                <div class="dropdown w-100">
+                                                                    <button
+                                                                        class="btn dropdown-toggle shadow-sm w-100 text-start"
+                                                                        type="button" id="dropdownMenuButton"
+                                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <span>Select Team Members</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu w-100"
+                                                                        aria-labelledby="dropdownMenuButton"
+                                                                        style="padding: 10px; max-height: 200px; overflow-y: auto; z-index: 1000;">
+                                                                        <li class="d-flex align-items-center lidocs "
+                                                                            *ngFor="let member of apiService.teamMembers">
+                                                                            <input type="checkbox" [id]="member"
+                                                                                [value]="member"
+                                                                                (change)="onCheckboxChange($event)"
+                                                                                [checked]="project.teamMembers.includes(member)"
+                                                                                class="me-2">
+                                                                            <label [for]="member">{{ member }}</label>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="project.teamMembers.length == 0 && formRef.submitted"
+                                                                class="text-danger">
+                                                                * Select at least one team member
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Start Date</label>
+                                                            <input required type="date" class="form-control"
+                                                                [(ngModel)]="editedProject.startDate" name="startDate"
+                                                                required id="startDate" #startDate="ngModel" />
+                                                            <div *ngIf="startDate.invalid && startDate.touched"
+                                                                class="text-danger">
+                                                                * Start Date is required
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">End Date</label>
+                                                            <input required type="date" class="form-control"
+                                                                [(ngModel)]="editedProject.endDate" name="endDate"
+                                                                required id="endDate" [min]="project.startDate" />
+                                                            <div *ngIf="project.endDate < project.startDate"
+                                                                class="text-danger">
+                                                                * End Date greater than Start Date
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Due In (Days)</label>
+                                                            <input required type="number" disabled class="form-control"
+                                                                [(ngModel)]="editedProject.dueDate" name="dueDate"
+                                                                required id="dueDate" readonly />
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Estimate (hours)</label>
+                                                            <input type="number" class="form-control"
+                                                                [(ngModel)]="editedProject.estimate" name="estimate"
+                                                                required #estimate="ngModel" />
+                                                            <div *ngIf="estimate.invalid && estimate.touched"
+                                                                class="text-danger">
+                                                                * Estimate is required
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-3">
+                                                            <label class="form-label">Time Spent (hours)</label>
+                                                            <input type="number" class="form-control"
+                                                                [(ngModel)]="editedProject.timeSpent" name="timeSpent"
+                                                                required #timeSpent="ngModel"
+                                                                [max]="project.estimate" />
+                                                            <div *ngIf="timeSpent.invalid && timeSpent.touched"
+                                                                class="text-danger">
+                                                                * Time Spent less than Estimate
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 text-end">
+                                                        <button type="submit"
+                                                            class="btn btn-primary border border-grey ms-2"
+                                                            [disabled]="formRef.invalid || project.teamMembers.length == 0"
+                                                            (click)="closeModal()">Update
+                                                            Project</button>
+                                                        <button class="btn btn-secondary ms-2" data-bs-dismiss="modal"
+                                                            type="button">Cancel</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- modal  end-->
+                        <button class="btn btn-outline-danger border-0 ms-1 px-2 py-1" title="Delete"
+                            (click)="confirmDelete()">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <strong>Project Name :</strong>
+                                <p>{{ project.title }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Created By:</strong>
+                                <p>{{ project.createdBy}}</p>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-2">
+
+                            <div class="mb-3">
+                                <strong>Start Date:</strong>
+                                <p>{{ project.startDate | date:'dd-MM-yyyy' }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong> Manager:</strong>
+                                <p>{{ project.projectManager }}</p>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-2">
+
+                            <div class="mb-3">
+                                <strong>End Date:</strong>
+                                <p>{{ project.endDate | date:'dd-MM-yyyy' }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Description:</strong>
+                                <p [title]="project.description" class="text-truncate">{{ project.description }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+
+                            <div class="mb-3">
+                                <strong>Due In(Days):</strong>
+                                <p>{{ project.dueDate }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Priority:</strong>
+                                <p [ngClass]="{
+                                              'text-danger': project.status === 'High',
+                                              'text-warning': project.status === 'Medium',
+                                              'text-success': project.status === 'Low'
+                                            }">
+                                   <b> {{ project.status }}</b>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+
+                            <div class="mb-3">
+                                <strong>Assigned To</strong>
+                                <p>{{ project.assignedTo
+                                    }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Team Members:</strong>
+                                <p [title]="project.teamMembers" class="text-truncate">{{ project.teamMembers }}</p>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <strong>Time Spend(H):</strong>
+                                <p>{{ project.timeSpent }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Time Estimate(H):</strong>
+                                <p>{{ project.estimate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

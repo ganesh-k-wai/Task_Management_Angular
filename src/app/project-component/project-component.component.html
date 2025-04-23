@@ -13,8 +13,8 @@
         </div>
         <!-- modal button  -->
         <button type="button" class="btn btn-primary float-end mt-2 p-2 createProjectbtn" data-bs-toggle="modal"
-          data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap"><i class="bi bi-plus"></i>Create
-          Project</button>
+          data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+          <i class="bi bi-plus"></i><span class="btn-shine">Create Project</span></button>
         <!-- modal  -->
         <div class="modal fade " id="exampleModal" aria-hidden="true" aria-labelledby="exampleModalLabel" tabindex="-1">
           <div class="modal-dialog modal-dialog-end " style="max-width: 1100px;height: 80vh;">
@@ -172,7 +172,7 @@
 
       </div>
 
-
+      <!-- table  -->
       <div class=" table-responsive  mb-2 border" style="height: 58vh;overflow-y: scroll;">
         <table class="table  table-bordered m-0 p-0 text-white border" [class.table-dark]="isDarkMode">
           <thead class="sticky-top top-0 theadBg">
@@ -256,7 +256,7 @@
           </tbody>
         </table>
       </div>
-
+      <!-- Pagination -->
       <div class="d-flex justify-content-between align-items-center pb-1 ">
         <div class="d-flex align-items-center d-none d-md-flex">
           <select id="itemsPerPage" class="form-select fs-6" style="min-width: 20px"
@@ -272,12 +272,12 @@
           <span class="text-muted">({{ projects.length }} item{{ filteredProjects.length !== 1 ? 's' : ''
             }})&ensp;</span>
           <div class="d-flex align-items-center">
-            <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page - 1)" [disabled]="page === 1">
+            <button class="btn btn-sm px-2 border-0" type="button" (click)="onPageChange(page - 1)" [disabled]="page === 1">
               <i class="bi bi-chevron-left"></i>
             </button>
             <button class="btn btn-sm px-2" type="button">{{ page }}</button>
             <span class="mx-2">of {{ totalPages() }}</span>
-            <button class="btn btn-sm px-2" type="button" (click)="onPageChange(page + 1)"
+            <button class="btn btn-sm px-2 border-0" type="button" (click)="onPageChange(page + 1)"
               [disabled]="page === totalPages()">
               <i class="bi bi-chevron-right"></i>
             </button>
