@@ -283,7 +283,8 @@
         <!-- searching  -->
             <div class="col-md-12 mb-1">
                 <div class="d-flex justify-content-between align-items-center">
-                    <!-- Search Box -->
+                    <h5>Task List</h5>
+
                     <div class="pb-1 d-flex align-items-center">
                         <div class="input-group w-100">
                             <input type="search" class="form-control tasksearchBox border-end-0" placeholder="Search..."
@@ -293,41 +294,8 @@
                             </button>
                         </div>
                     </div>
-                    <h5>Task List</h5>
 
-                    <!-- Updated Sort Dropdown -->
-                    <div class="dropdown pb-1">
-                        <button class="btn dropdown-toggle border border-grey btn-sm" type="button" id="sortDropdown"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="bi bi-funnel"></i>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                            <li style="cursor: pointer;">
-                                <a class="dropdown-item" (click)="onTaskSortChange('title')">
-                                    Title
-                                    <span *ngIf="sortColumn === 'title'">
-                                        ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
-                                    </span>
-                                </a>
-                            </li>
-                            <li style="cursor: pointer;">
-                                <a class="dropdown-item" (click)="onTaskSortChange('assignedTo')">
-                                    Assigned To
-                                    <span *ngIf="sortColumn === 'assignedTo'">
-                                        ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
-                                    </span>
-                                </a>
-                            </li>
-                            <li style="cursor: pointer;">
-                                <a class="dropdown-item" (click)="onTaskSortChange('taskStatus')">
-                                    Status
-                                    <span *ngIf="sortColumn === 'taskStatus'">
-                                        ({{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }})
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    
                 </div>
             </div>
         <!-- table list  -->
@@ -339,17 +307,46 @@
                     <div class="table-responsive "  style="height: 44vh;overflow-y: scroll;">
                         <table class="table table-bordered" [class.table-dark]="isDarkMode">
                             <thead class="text-start sticky-top">
-                                <tr class="">
-                                    <!-- <th>Sr.No</th> -->
-                                    <th style="width: 340px;">Title</th>
-                                    <th style="width: 340px;">Description</th>
-                                    <th style="width: 110px;">Assigned To</th>
-                                    <th style="width: 148px;">Status</th>
-                                    <th style="width: 152px;">Time Estimate</th>
-                                    <th style="width: 152px;">Time Spent</th>
-                                    <th style="width: 100px;">Action</th>
+                                <tr>
+                                  <th style="width: 340px;" (click)="onTaskSortChange('title')">
+                                    Title
+                                    <span *ngIf="sortColumn === 'title'">
+                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                    </span>
+                                  </th>
+                                  <th style="width: 340px;" (click)="onTaskSortChange('description')">
+                                    Description
+                                    <span *ngIf="sortColumn === 'description'">
+                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                    </span>
+                                  </th>
+                                  <th (click)="onTaskSortChange('assignedTo')">
+                                    Assigned To
+                                    <span *ngIf="sortColumn === 'assignedTo'">
+                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                    </span>
+                                  </th>
+                                  <th (click)="onTaskSortChange('taskStatus')">
+                                    Status
+                                    <span *ngIf="sortColumn === 'taskStatus'">
+                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                    </span>
+                                  </th>
+                                  <th (click)="onTaskSortChange('taskEstimate')">
+                                    Time Estimate
+                                    <span *ngIf="sortColumn === 'taskEstimate'">
+                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                    </span>
+                                  </th>
+                                  <th (click)="onTaskSortChange('timeSpent')">
+                                    Time Spent
+                                    <span *ngIf="sortColumn === 'timeSpent'">
+                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                    </span>
+                                  </th>
+                                  <th style="width: 100px;">Action</th>
                                 </tr>
-                            </thead>
+                              </thead>
                             <tbody>
                                 <tr *ngIf="filteredTasks.length === 0" class="text-center">
                                     <td colspan="8" class="">No tasks found</td>
@@ -431,7 +428,7 @@
             </div>
         </div>
     </div>
-          
+            <!-- create task -->
             <div  class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="createTaskModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -538,7 +535,7 @@
                     </div>
                 </div>
             </div>
-
+            <!-- edit task  -->
             <div class="modal fade" *ngIf="!isEditingTask" id="editTaskModal" tabindex="-1"
                 aria-labelledby="editTaskModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
