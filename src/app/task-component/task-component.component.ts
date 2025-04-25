@@ -171,6 +171,10 @@ export class TaskComponentComponent implements OnInit {
     console.log('this.selectedMembers', this.selectedMembers);
   }
 
+  onLabelClick(event: Event): void {
+    event.preventDefault();
+  }
+
   saveTask(taskForm: any) {
     const updatedTask = {
       task_id: this.currentTask.task_id,

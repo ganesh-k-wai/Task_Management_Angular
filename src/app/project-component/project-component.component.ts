@@ -24,13 +24,11 @@ declare var bootstrap: any;
   templateUrl: './project-component.component.html',
   styleUrls: ['./project-component.component.css'],
 })
-export class ProjectComponentComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class ProjectComponentComponent implements OnInit, AfterViewInit {
   projects: any[] = [];
   userName: string = '';
-  daysRemaining: number = 0;
-  intervalId: any;
+  // daysRemaining: number = 0;
+  // intervalId: any;
   filteredProjects: any[] = [];
 
   isDarkMode: boolean = false;
@@ -63,8 +61,7 @@ export class ProjectComponentComponent
     estimate: '',
     timeSpent: '',
   };
-
-  openCreateProjectModal() {
+  openCreateProjectModal(): void {
     this.project = {
       project_Id: '',
       title: '',
@@ -80,8 +77,9 @@ export class ProjectComponentComponent
       estimate: '',
       timeSpent: '',
     };
-  }
 
+    this.initializeDateInputs();
+  }
   constructor(
     private router: Router,
     private userService: UserService,
@@ -98,7 +96,7 @@ export class ProjectComponentComponent
   ngOnInit() {
     this.getUserName();
     this.loadProjects();
-    this.startLiveDaysRemaining();
+    // this.startLiveDaysRemaining();
   }
 
   getUserName() {
@@ -168,12 +166,7 @@ export class ProjectComponentComponent
 
   ngAfterViewInit() {
     this.initializeDateInputs();
-  }
-
-  ngOnDestroy() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    this.initializeDateInputsEdits();
   }
 
   initializeDateInputs(): void {
@@ -195,7 +188,30 @@ export class ProjectComponentComponent
       const endDate = new Date(endDateInput.value);
       if (endDate) {
         this.calculateDueInDays(startDate, endDate);
-        this.updateDaysRemaining();
+      }
+    });
+  }
+  initializeDateInputsEdits(): void {
+    const startDateInput = document.getElementById(
+      'startDateEdit'
+    ) as HTMLInputElement;
+    const endDateInput = document.getElementById(
+      'endDateEdit'
+    ) as HTMLInputElement;
+
+    startDateInput.addEventListener('change', () => {
+      const startDate = new Date(startDateInput.value);
+      if (startDate) {
+        endDateInput.min = startDateInput.value;
+        this.calculateDueInDaysEdit(startDate, new Date(endDateInput.value));
+      }
+    });
+
+    endDateInput.addEventListener('change', () => {
+      const startDate = new Date(startDateInput.value);
+      const endDate = new Date(endDateInput.value);
+      if (endDate) {
+        this.calculateDueInDaysEdit(startDate, endDate);
       }
     });
   }
@@ -205,21 +221,11 @@ export class ProjectComponentComponent
     const diffInDays: any = diffInMs / (1000 * 60 * 60 * 24);
     this.project.dueDate = diffInDays;
   }
-
-  updateDaysRemaining(): void {
-    if (this.project.endDate) {
-      const endDate = new Date(this.project.endDate);
-      const today = new Date();
-      const diffInMs = endDate.getTime() - today.getTime();
-      this.daysRemaining = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-    }
-  }
-
-  startLiveDaysRemaining(): void {
-    this.updateDaysRemaining();
-    this.intervalId = setInterval(() => {
-      this.updateDaysRemaining();
-    }, 1000 * 60 * 60 * 24);
+  calculateDueInDaysEdit(startDate: Date, endDate: Date): void {
+    const diffInMs = endDate.getTime() - startDate.getTime();
+    const diffInDays: any = diffInMs / (1000 * 60 * 60 * 24);
+    this.editedProject.dueDate = diffInDays;
+    console.log('Due in days:', this.editedProject.dueDate);
   }
 
   onCheckboxChange(event: any) {
@@ -356,14 +362,13 @@ export class ProjectComponentComponent
   editedProject: any = {};
 
   editProject(projectID: string) {
-    console.log(projectID);
     this.project = this.apiService.getProjectById(projectID);
     this.editedProject = { ...this.project };
 
     if (this.editedProject.startDate && this.editedProject.endDate) {
       const startDate = new Date(this.editedProject.startDate);
       const endDate = new Date(this.editedProject.endDate);
-      this.calculateDueInDays(startDate, endDate);
+      this.calculateDueInDaysEdit(startDate, endDate);
     }
 
     this.loadProjects();

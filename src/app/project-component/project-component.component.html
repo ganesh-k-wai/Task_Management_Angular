@@ -173,16 +173,16 @@
               <div class="row mb-3">
                 <div class="col-md-12 p-3">
                   <label class="form-label">Project Name</label>
-                  <input required type="text" class="form-control" [(ngModel)]="project.title" name="title" required
-                    #title="ngModel" />
+                  <input required type="text" placeholder=" Project Name..." class="form-control"
+                    [(ngModel)]="project.title" name="title" required #title="ngModel" />
                   <div *ngIf="title.invalid && title.touched" class="text-danger">
                     * Project Title is required
                   </div>
                 </div>
                 <div class="col-md-12 p-3">
                   <label class="form-label">Description</label>
-                  <textarea class="form-control" rows="3" [(ngModel)]="project.description" name="description" required
-                    #desc="ngModel"></textarea>
+                  <textarea class="form-control" placeholder=" Project Description..." rows="3"
+                    [(ngModel)]="project.description" name="description" required #desc="ngModel"></textarea>
                   <div *ngIf="desc.invalid && desc.touched" class="text-danger">
                     * Description is required
                   </div>
@@ -194,16 +194,16 @@
                 </div>
                 <div class="col-md-3 p-3">
                   <label class="form-label">Project Manager</label>
-                  <input type="text" class="form-control" [(ngModel)]="project.projectManager" name="projectManager"
-                    required #pm="ngModel" />
+                  <input type="text" class="form-control" placeholder=" Project Manager..."
+                    [(ngModel)]="project.projectManager" name="projectManager" required #pm="ngModel" />
                   <div *ngIf="pm.invalid && pm.touched" class="text-danger">
                     * Project Manager is required
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
                   <label class="form-label">Team Lead</label>
-                  <input type="text" class="form-control" [(ngModel)]="project.assignedTo" name="assignedTo" required
-                    #assignedTo="ngModel" />
+                  <input type="text" class="form-control" placeholder=" Team Lead..." [(ngModel)]="project.assignedTo"
+                    name="assignedTo" required #assignedTo="ngModel" />
                   <div *ngIf="assignedTo.invalid && assignedTo.touched" class="text-danger">
                     * Assigned To is required
                   </div>
@@ -382,7 +382,7 @@
                 <div class="col-md-3 p-3">
                   <label class="form-label">Start Date</label>
                   <input required type="date" class="form-control" [(ngModel)]="editedProject.startDate"
-                    name="startDate" required id="startDate" #startDate="ngModel" />
+                    name="startDate" required id="startDateEdit" #startDate="ngModel" />
                   <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">
                     * Start Date is required
                   </div>
@@ -390,7 +390,7 @@
                 <div class="col-md-3 p-3">
                   <label class="form-label">End Date</label>
                   <input required type="date" class="form-control" [(ngModel)]="editedProject.endDate" name="endDate"
-                    required id="endDate" [min]="project.startDate" />
+                    required id="endDateEdit" [min]="project.startDate" />
                   <!-- <div *ngIf="project.endDate < project.startDate" class="text-danger">
                     * End Date greater than Start Date
                   </div> -->

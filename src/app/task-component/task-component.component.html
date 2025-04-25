@@ -470,7 +470,8 @@
                                                     <input type="checkbox" [id]="member" [value]="member"
                                                         name="assignedTo" (change)="onTaskMemberChange($event)"
                                                         [checked]="selectedMembers.includes(member)" class="me-2">
-                                                    <label [for]="member">{{ member }}</label>
+                                                    <label [for]="member" (click)="onLabelClick($event)">{{ member
+                                                        }}</label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -569,7 +570,8 @@
                                                     <input type="checkbox" [id]="member" [value]="member"
                                                         name="assignedTo" (change)="onTaskMemberChange($event)"
                                                         [checked]="selectedTaskMembers.includes(member)" class="me-2">
-                                                    <label [for]="member">{{ member }}</label>
+                                                    <label [for]="member" (click)="onLabelClick($event)">{{ member
+                                                        }}</label>
                                                 </li>
                                             </ul>
                                         </div>
