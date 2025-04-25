@@ -5,7 +5,7 @@
   </div>
   <div class="row justify-content-center mx-auto " style="max-width: 1450px; ">
     <!-- Main Content -->
-    <div class="col-md-12  mt-5  ">
+    <div class="col-md-12  mt-5 p-1 pe-3 ">
       <div class="mb-4  pt-4">
         <div class="float-start">
           <h2 class="text-center me-3 colorContainer">Project Management</h2>
@@ -23,6 +23,8 @@
     <div class="col-md-12">
       <div class="d-flex justify-content-between align-items-center">
         <!-- Search Box -->
+        <h4 class="ps-1">Project List</h4>
+
         <div class="pb-1 d-flex align-items-center">
           <div class="input-group " style="width: 400px;">
             <input type="search" class="form-control projectsearchBox border-end-0 p-2" placeholder="Search..."
@@ -32,7 +34,6 @@
             </button>
           </div>
         </div>
-
 
       </div>
 
@@ -172,7 +173,7 @@
             <form (ngSubmit)="onSubmit(formRef)" #formRef="ngForm">
               <div class="row mb-3">
                 <div class="col-md-12 p-3">
-                  <label class="form-label">Project Name</label>
+                  <label class="form-label">Project Name <span class="text-danger">*</span></label>
                   <input required type="text" placeholder=" Project Name..." class="form-control"
                     [(ngModel)]="project.title" name="title" required #title="ngModel" />
                   <div *ngIf="title.invalid && title.touched" class="text-danger">
@@ -180,7 +181,7 @@
                   </div>
                 </div>
                 <div class="col-md-12 p-3">
-                  <label class="form-label">Description</label>
+                  <label class="form-label">Project Description <span class="text-danger">*</span></label>
                   <textarea class="form-control" placeholder=" Project Description..." rows="3"
                     [(ngModel)]="project.description" name="description" required #desc="ngModel"></textarea>
                   <div *ngIf="desc.invalid && desc.touched" class="text-danger">
@@ -193,7 +194,7 @@
                     readonly />
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Project Manager</label>
+                  <label class="form-label">Project Manager <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" placeholder=" Project Manager..."
                     [(ngModel)]="project.projectManager" name="projectManager" required #pm="ngModel" />
                   <div *ngIf="pm.invalid && pm.touched" class="text-danger">
@@ -201,7 +202,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Team Lead</label>
+                  <label class="form-label">Team Lead <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" placeholder=" Team Lead..." [(ngModel)]="project.assignedTo"
                     name="assignedTo" required #assignedTo="ngModel" />
                   <div *ngIf="assignedTo.invalid && assignedTo.touched" class="text-danger">
@@ -221,7 +222,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Team Members</label>
+                  <label class="form-label">Team Members <span class="text-danger">*</span></label>
                   <div class="input-group">
                     <div class="dropdown w-100">
                       <button class="btn dropdown-toggle shadow-sm w-100 text-start" type="button"
@@ -243,7 +244,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Start Date</label>
+                  <label class="form-label">Start Date <span class="text-danger">*</span></label>
                   <input required type="date" class="form-control" [(ngModel)]="project.startDate" name="startDate"
                     required id="startDate" #startDate="ngModel" />
                   <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">
@@ -251,11 +252,15 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">End Date</label>
+                  <label class="form-label">End Date <span class="text-danger">*</span></label>
                   <input required type="date" class="form-control" [(ngModel)]="project.endDate" name="endDate" required
-                    id="endDate" [min]="project.startDate" />
-                  <div *ngIf="project.endDate < project.startDate" class="text-danger">
-                    * End Date greater than Start Date
+                    id="endDate" [min]="project.startDate" #endDate="ngModel" />
+                  <div *ngIf="endDate.invalid && endDate.touched" class="text-danger">
+                    * End Date is required
+                  </div>
+                  <div *ngIf="project.endDate && project.startDate && project.endDate < project.startDate"
+                    class="text-danger">
+                    * End Date must be >= Start Date
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
@@ -264,7 +269,7 @@
                     name="dueDate" required id="dueDate" readonly />
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Estimate (hours)</label>
+                  <label class="form-label">Time Estimate (hours) <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" [(ngModel)]="project.estimate" name="estimate" required
                     #estimate="ngModel" />
                   <div *ngIf="estimate.invalid && estimate.touched" class="text-danger">
@@ -272,7 +277,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Time Spent (hours)</label>
+                  <label class="form-label">Time Spent (hours) <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" [(ngModel)]="project.timeSpent" name="timeSpent" required
                     #timeSpent="ngModel" [max]="project.estimate" />
                   <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
@@ -308,7 +313,7 @@
             <form (ngSubmit)="saveProject()" #formRef="ngForm">
               <div class="row mb-3">
                 <div class="col-md-12 p-3">
-                  <label class="form-label">Project Name</label>
+                  <label class="form-label">Project Name <span class="text-danger">*</span></label>
                   <input required type="text" class="form-control" [(ngModel)]="editedProject.title" name="title"
                     required #title="ngModel" />
                   <div *ngIf="title.invalid && title.touched" class="text-danger">
@@ -316,7 +321,7 @@
                   </div>
                 </div>
                 <div class="col-md-12 p-3">
-                  <label class="form-label">Description</label>
+                  <label class="form-label">Project Description <span class="text-danger">*</span></label>
                   <textarea class="form-control" rows="3" [(ngModel)]="editedProject.description" name="description"
                     required #desc="ngModel"></textarea>
                   <div *ngIf="desc.invalid && desc.touched" class="text-danger">
@@ -329,7 +334,7 @@
                     readonly />
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Project Manager</label>
+                  <label class="form-label">Project Manager <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="editedProject.projectManager"
                     name="projectManager" required #pm="ngModel" />
                   <div *ngIf="pm.invalid && pm.touched" class="text-danger">
@@ -337,7 +342,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Team Lead</label>
+                  <label class="form-label">Team Lead <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="editedProject.assignedTo" name="assignedTo"
                     required #assignedTo="ngModel" />
                   <div *ngIf="assignedTo.invalid && assignedTo.touched" class="text-danger">
@@ -345,7 +350,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Priority</label>
+                  <label class="form-label">Priority </label>
                   <select class="form-select" [(ngModel)]="editedProject.status" name="status" required
                     #status="ngModel">
                     <option value="" disabled>Select Priority</option>
@@ -358,7 +363,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Team Members</label>
+                  <label class="form-label">Team Members <span class="text-danger">*</span></label>
                   <div class="input-group">
                     <div class="dropdown w-100">
                       <button class="btn dropdown-toggle shadow-sm w-100 text-start" type="button"
@@ -380,7 +385,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Start Date</label>
+                  <label class="form-label">Start Date <span class="text-danger">*</span></label>
                   <input required type="date" class="form-control" [(ngModel)]="editedProject.startDate"
                     name="startDate" required id="startDateEdit" #startDate="ngModel" />
                   <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">
@@ -388,12 +393,17 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">End Date</label>
+                  <label class="form-label">End Date <span class="text-danger">*</span></label>
                   <input required type="date" class="form-control" [(ngModel)]="editedProject.endDate" name="endDate"
-                    required id="endDateEdit" [min]="project.startDate" />
-                  <!-- <div *ngIf="project.endDate < project.startDate" class="text-danger">
-                    * End Date greater than Start Date
-                  </div> -->
+                    required id="endDateEdit" [min]="editedProject.startDate" #endDate="ngModel" />
+                  <div *ngIf="endDate.invalid && endDate.touched" class="text-danger">
+                    * End Date is required
+                  </div>
+                  <div
+                    *ngIf="editedProject.endDate && editedProject.startDate && editedProject.endDate < editedProject.startDate"
+                    class="text-danger">
+                    * End Date must be >= Start Date
+                  </div>
                 </div>
                 <div class="col-md-3 p-3">
                   <label class="form-label">Due In (Days)</label>
@@ -401,7 +411,7 @@
                     name="dueDate" required id="dueDate" readonly />
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Estimate (hours)</label>
+                  <label class="form-label">Time Estimate (hours) <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" [(ngModel)]="editedProject.estimate" name="estimate"
                     required #estimate="ngModel" />
                   <div *ngIf="estimate.invalid && estimate.touched" class="text-danger">
@@ -409,7 +419,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 p-3">
-                  <label class="form-label">Time Spent (hours)</label>
+                  <label class="form-label">Time Spent (hours) <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" [(ngModel)]="editedProject.timeSpent" name="timeSpent"
                     required #timeSpent="ngModel" [max]="project.estimate" />
                   <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">

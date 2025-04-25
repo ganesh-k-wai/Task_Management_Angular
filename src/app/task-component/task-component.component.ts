@@ -73,49 +73,18 @@ export class TaskComponentComponent implements OnInit {
     this.apiService.logout();
     this.router.navigate(['/']);
   }
-  // ................
-  confirmDelete() {
-    const confirmed = window.confirm('Are you sure ?');
-    if (confirmed) {
-      this.deleteProject();
-    }
-  }
-  // editProject() {
-  //   this.isEditing = true;
-  //   this.editedProject = { ...this.project };
-  // }
-  // cancelEdit() {
-  //   this.isEditing = false;
-  //   this.editedProject = { ...this.project };
-  // }
-
-  deleteProject() {
-    this.apiService.deleteProject(this.projectId);
-    this.router.navigate(['/project-comp']);
-  }
-  closeModal() {
-    const modalEl = document.getElementById('exampleModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    if (modalInstance) {
-      modalInstance.hide();
-    }
-  }
-
-  saveProject() {
-    this.apiService.updateProject(this.projectId, this.editedProject);
-    // console.log(this.editProject);
-
-    this.isEditing = false;
-    this.closeModal();
-
-    this.loadProjectDetails();
-    this.toastr.success('Project updated successfully!');
-  }
 
   // -------------task
 
   isEditingTask: boolean = false;
-  currentTask: any = {};
+  currentTask: any = {
+    title: '',
+    description: '',
+    taskStatus: 'New', // Default value
+    taskEstimate: '',
+    timeSpent: '',
+    assignedTo: [],
+  };
   daysRemaining: number = 0;
   intervalId: any;
   teamMembers: any[] = [];
@@ -127,23 +96,6 @@ export class TaskComponentComponent implements OnInit {
   infinityValue: number = Infinity;
 
   selectedMembers: string[] = []; // Unified array for selected team members
-
-  closeTaskModal() {
-    this.selectedMembers = [];
-    this.currentTask = {};
-    const modalEl = document.getElementById('taskModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    if (modalInstance) {
-      modalInstance.hide();
-    }
-  }
-  closeeditTaskModal() {
-    const modalEl = document.getElementById('editTaskModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    if (modalInstance) {
-      modalInstance.hide();
-    }
-  }
 
   addTask(taskForm: any) {
     const task = {
@@ -159,16 +111,23 @@ export class TaskComponentComponent implements OnInit {
     this.closeTaskModal();
     this.loadTasks();
     taskForm.reset();
-    this.selectedMembers = []; // Reset selected members
+    this.selectedMembers = [];
+
+    taskForm.reset();
+    this.currentTask = {
+      title: '',
+      description: '',
+      taskStatus: 'New',
+      taskEstimate: '',
+      timeSpent: '',
+      assignedTo: [],
+    };
     this.toastr.success('Task added successfully!');
   }
 
   loadTasks() {
     this.tasks = this.apiService.getTasksByProjectId(this.projectId);
     this.applyTaskFilters();
-    console.log('this.selectedTeamMembers', this.selectedTeamMembers);
-    console.log('this.selectedTaskTeamMembers', this.selectedTaskTeamMembers);
-    console.log('this.selectedMembers', this.selectedMembers);
   }
 
   onLabelClick(event: Event): void {
@@ -209,11 +168,6 @@ export class TaskComponentComponent implements OnInit {
     console.log('Updated Selected Task Members:', this.selectedTaskMembers);
   }
 
-  // cancelEditTask() {
-  // this.isEditingTask = false;
-  // this.currentTask = {};
-  // this.selectedTaskTeamMembers = [];
-  // }
   editTask(task: any) {
     // this.isEditingTask = true;
     this.currentTask = { ...task };
@@ -364,5 +318,21 @@ export class TaskComponentComponent implements OnInit {
     const startIndex = (this.page - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.filteredTasks = filteredTasks.slice(startIndex, endIndex);
+  }
+  closeTaskModal() {
+    this.selectedMembers = [];
+    this.currentTask = {};
+    const modalEl = document.getElementById('taskModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
+  closeeditTaskModal() {
+    const modalEl = document.getElementById('editTaskModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
   }
 }
