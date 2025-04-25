@@ -1,18 +1,16 @@
-<div class="container-fluid "  style="margin-top: 66px;">
-    
+<div class="container-fluid " style="margin-top: 66px;">
     <div class="row">
         <app-header [userName]="userName"></app-header>
     </div>
-
     <div class="row justify-content-center mx-auto" style="max-width: 1450px;">
         <div class="col-md-12">
-            <div  class="card mb-2 shadow w-100 rounded-0 ">
+            <div class="card mb-2 shadow w-100 rounded-0 ">
                 <div class="card-header d-flex justify-content-between p-0 ">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-0 ps-2">Project Details:</h5>
                     </div>
 
-                    <div class="d-flex">    
+                    <div class="d-flex">
 
                         <!-- modal btn  -->
                         <button type="button" class="btn my-1 createTaskbtn me-2" data-bs-toggle="modal"
@@ -209,7 +207,7 @@
                                 <strong>Created By:</strong>
                                 <p>{{ project.createdBy}}</p>
                             </div>
-                            
+
                         </div>
                         <div class="col-md-2">
 
@@ -221,7 +219,7 @@
                                 <strong> Manager:</strong>
                                 <p>{{ project.projectManager }}</p>
                             </div>
-                            
+
                         </div>
                         <div class="col-md-2">
 
@@ -247,7 +245,7 @@
                                               'text-warning': project.status === 'Medium',
                                               'text-success': project.status === 'Low'
                                             }">
-                                   <b> {{ project.status }}</b>
+                                    <b> {{ project.status }}</b>
                                 </p>
                             </div>
                         </div>
@@ -262,7 +260,7 @@
                                 <strong>Team Members:</strong>
                                 <p [title]="project.teamMembers" class="text-truncate">{{ project.teamMembers }}</p>
                             </div>
-                            
+
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
@@ -281,99 +279,104 @@
     </div>
     <div class="row justify-content-center mx-auto" style="max-width: 1450px;">
         <!-- searching  -->
-            <div class="col-md-12 mb-1">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5>Task List</h5>
+        <div class="col-md-12 mb-1">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>Task List</h5>
 
-                    <div class="pb-1 d-flex align-items-center">
-                        <div class="input-group w-100">
-                            <input type="search" class="form-control tasksearchBox border-end-0" placeholder="Search..."
-                                [(ngModel)]="searchQuery" (input)="onTaskSearchChange()" aria-label="Search">
-                            <button class="btn border border-grey border-start-0 createtaskbtn" type="button">
-                                <i class="bi bi-search text-white"></i>
-                            </button>
-                        </div>
+                <div class="pb-1 d-flex align-items-center">
+                    <div class="input-group w-100">
+                        <input type="search" class="form-control tasksearchBox border-end-0" placeholder="Search..."
+                            [(ngModel)]="searchQuery" (input)="onTaskSearchChange()" aria-label="Search">
+                        <button class="btn border border-grey border-start-0 createtaskbtn" type="button">
+                            <i class="bi bi-search text-white"></i>
+                        </button>
                     </div>
-
-                    
                 </div>
+
+
             </div>
+        </div>
         <!-- table list  -->
         <div class="col-md-12">
-            <div class="card mb-1  rounded-0 " >
+            <div class="card mb-1  rounded-0 ">
                 <div class="card-header p-0 ps-2 ">
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive "  style="height: 44vh;overflow-y: scroll;">
+                    <div class="table-responsive " style="height: 44vh;overflow-y: scroll;">
                         <table class="table table-bordered" [class.table-dark]="isDarkMode">
                             <thead class="text-start sticky-top">
                                 <tr>
-                                  <th style="width: 340px;" (click)="onTaskSortChange('title')">
-                                    Title
-                                    <span *ngIf="sortColumn === 'title'">
-                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
-                                    </span>
-                                  </th>
-                                  <th style="width: 340px;" (click)="onTaskSortChange('description')">
-                                    Description
-                                    <span *ngIf="sortColumn === 'description'">
-                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
-                                    </span>
-                                  </th>
-                                  <th (click)="onTaskSortChange('assignedTo')">
-                                    Assigned To
-                                    <span *ngIf="sortColumn === 'assignedTo'">
-                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
-                                    </span>
-                                  </th>
-                                  <th (click)="onTaskSortChange('taskStatus')">
-                                    Status
-                                    <span *ngIf="sortColumn === 'taskStatus'">
-                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
-                                    </span>
-                                  </th>
-                                  <th (click)="onTaskSortChange('taskEstimate')">
-                                    Time Estimate
-                                    <span *ngIf="sortColumn === 'taskEstimate'">
-                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
-                                    </span>
-                                  </th>
-                                  <th (click)="onTaskSortChange('timeSpent')">
-                                    Time Spent
-                                    <span *ngIf="sortColumn === 'timeSpent'">
-                                      ({{ sortDirection === 'asc' ? '↓' : '↑' }})
-                                    </span>
-                                  </th>
-                                  <th style="width: 100px;">Action</th>
+                                    <th style="width: 340px;" (click)="onTaskSortChange('title')">
+                                        Title
+                                        <span *ngIf="sortColumn === 'title'">
+                                            ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                        </span>
+                                    </th>
+                                    <th style="width: 340px;" (click)="onTaskSortChange('description')">
+                                        Description
+                                        <span *ngIf="sortColumn === 'description'">
+                                            ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                        </span>
+                                    </th>
+                                    <th (click)="onTaskSortChange('assignedTo')">
+                                        Assigned To
+                                        <span *ngIf="sortColumn === 'assignedTo'">
+                                            ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                        </span>
+                                    </th>
+                                    <th (click)="onTaskSortChange('taskStatus')">
+                                        Status
+                                        <span *ngIf="sortColumn === 'taskStatus'">
+                                            ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                        </span>
+                                    </th>
+                                    <th (click)="onTaskSortChange('taskEstimate')">
+                                        Time Estimate
+                                        <span *ngIf="sortColumn === 'taskEstimate'">
+                                            ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                        </span>
+                                    </th>
+                                    <th (click)="onTaskSortChange('timeSpent')">
+                                        Time Spent
+                                        <span *ngIf="sortColumn === 'timeSpent'">
+                                            ({{ sortDirection === 'asc' ? '↓' : '↑' }})
+                                        </span>
+                                    </th>
+                                    <th style="width: 100px;">Action</th>
                                 </tr>
-                              </thead>
+                            </thead>
                             <tbody>
                                 <tr *ngIf="filteredTasks.length === 0" class="text-center">
                                     <td colspan="8" class="">No tasks found</td>
                                 </tr>
                                 <tr *ngFor="let task of filteredTasks let i=index" class="">
                                     <!-- <td>{{ i+1 }}</td> -->
-                                    <td class="text-truncate" style="max-width: 350px;" [title]="task.title">{{ task.title }}</td>
-                                    <td class="text-truncate" style="max-width: 350px;" [title]="task.description">{{ task.description }}</td>
+                                    <td class="text-truncate" style="max-width: 350px;" [title]="task.title">{{
+                                        task.title }}</td>
+                                    <td class="text-truncate" style="max-width: 350px;" [title]="task.description">{{
+                                        task.description }}</td>
 
-                                    <td [title]="task.assignedTo ">{{ task.assignedTo.length }} <i class="bi bi-people"></i></td>
+                                    <td [title]="task.assignedTo ">{{ task.assignedTo.length }} <i
+                                            class="bi bi-people"></i></td>
                                     <!-- <td>{{ task.taskStatus }}</td> -->
 
                                     <td style="white-space: nowrap;" class="" style="padding: 10px;">
                                         <span class="d-flex align-items-center border rounded-pill p-0 px-1"
-                                          style="font-size: 0.9rem; padding: 12px 6px;">
-                                          <i class="bi bi-dot" [ngClass]="{
+                                            style="font-size: 0.9rem; padding: 12px 6px;">
+                                            <i class="bi bi-dot" [ngClass]="{
                                               'text-danger': task.taskStatus === 'Completed',
                                               'text-warning': task.taskStatus === 'In Progress',
                                               'text-success': task.taskStatus === 'New'
-                                            }" style="font-size: 1.8rem; line-height: 0.1; vertical-align: middle;"></i>
-                                          <span style="margin-left: 0.2rem; margin-right: 0.2rem;">{{ task.taskStatus }}</span>
+                                            }"
+                                                style="font-size: 1.8rem; line-height: 0.1; vertical-align: middle;"></i>
+                                            <span style="margin-left: 0.2rem; margin-right: 0.2rem;">{{ task.taskStatus
+                                                }}</span>
                                         </span>
-                                      </td>
+                                    </td>
                                     <td>{{ task.taskEstimate }} Hrs</td>
                                     <td>{{ task.timeSpent }} Hrs</td>
                                     <td>
-                                       
+
                                         <button class="btn btn-outline-warning border-0 px-2 py-1" title="Edit"
                                             data-bs-toggle="modal" data-bs-target="#editTaskModal"
                                             (click)="editTask(task)">
@@ -422,235 +425,214 @@
                                 [disabled]="page === totalPages()">
                                 <i class="bi bi-chevron-right"></i>
                             </button>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-            <!-- create task -->
-            <div  class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="createTaskModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="createTaskModalLabel">Create Task</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <form (ngSubmit)="addTask(taskForm)" #taskForm="ngForm">
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <label for="taskTitle">Title</label>
-                                                <input type="text" id="taskTitle" name="taskTitle" class="form-control"
-                                                    ngModel required #taskTitle="ngModel">
-                                                <div *ngIf="taskTitle.invalid && taskTitle.touched" class="text-danger">
-                                                    * Task Title is required
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label>Task Assigned To</label>
-                                                <div class="input-group">
-                                                    <div class="dropdown w-100">
-                                                        <button
-                                                            class="btn dropdown-toggle border border-grey w-100 text-start"
-                                                            type="button" id="dropdownMenuButton"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            Select Team Members
-                                                        </button>
-                                                        <ul class="dropdown-menu w-100"
-                                                            aria-labelledby="dropdownMenuButton"
-                                                            style="padding: 10px; max-height: 200px; overflow-y: auto;">
-                                                            <li class="d-flex align-items-center"
-                                                                *ngFor="let member of teamMembers">
-                                                                <input type="checkbox" [id]="member" [value]="member"
-                                                                    name="assignedTo"
-                                                                    (change)="onTaskMemberChange($event)"
-                                                                    [checked]="selectedMembers.includes(member)"
-                                                                    class="me-2">
-                                                                <label [for]="member">{{ member }}</label>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div *ngIf="taskForm.submitted && selectedMembers.length === 0"
-                                                    class="text-danger">
-                                                    * Select at least one team member
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="status">Status</label>
-                                                <select id="status" name="taskStatus" class="form-control" [(ngModel)]="currentTask.taskStatus" [value]="currentTask.taskStatus" 
-                                                    required>
-                                                    <option value="New" >New</option>
-                                                    <option value="In Progress">In Progress</option>
-                                                    <option value="Completed">Completed</option>
-                                                </select>
-                                            </div>
-                                            
-                                            <div class="col-md-12 mb-3">
-                                                <label for="taskDescription">Description</label>
-                                                <textarea id="taskDescription" name="taskDescription"
-                                                    class="form-control" ngModel required
-                                                    #taskDescription="ngModel"></textarea>
-                                                <div *ngIf="taskDescription.invalid && taskDescription.touched"
-                                                    class="text-danger">
-                                                    * Task Description is required
-                                                </div>
-                                            </div>
+</div>
+
+<!-- create task -->
+<div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createTaskModalLabel">Create Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form (ngSubmit)="addTask(taskForm)" #taskForm="ngForm">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="taskTitle">Title</label>
+                                    <input type="text" id="taskTitle" name="taskTitle" class="form-control" ngModel
+                                        required #taskTitle="ngModel">
+                                    <div *ngIf="taskTitle.invalid && taskTitle.touched" class="text-danger">
+                                        * Task Title is required
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Task Assigned To</label>
+                                    <div class="input-group">
+                                        <div class="dropdown w-100">
+                                            <button class="btn dropdown-toggle border border-grey w-100 text-start"
+                                                type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Select Team Members
+                                            </button>
+                                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
+                                                style="padding: 10px; max-height: 200px; overflow-y: auto;">
+                                                <li class="d-flex align-items-center"
+                                                    *ngFor="let member of teamMembers">
+                                                    <input type="checkbox" [id]="member" [value]="member"
+                                                        name="assignedTo" (change)="onTaskMemberChange($event)"
+                                                        [checked]="selectedMembers.includes(member)" class="me-2">
+                                                    <label [for]="member">{{ member }}</label>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="estimate">Estimate (hours)</label>
-                                                <input type="number" id="estimate" name="taskEstimate"
-                                                    class="form-control" ngModel required #taskEstimate="ngModel">
-                                                <div *ngIf="taskEstimate.invalid && taskEstimate.touched"
-                                                    class="text-danger">
-                                                    * Estimate Greater than Time Spent
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="timeSpent">Time Spent (hours)</label>
-                                                <input type="number" id="timeSpent" name="timeSpent"
-                                                    class="form-control" ngModel required #timeSpent="ngModel"
-                                                    [max]="taskEstimate?.value">
-                                                <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
-                                                    * Time Spent less than Estimate
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end mt-3">
-                                            <button type="button" class="btn btn-secondary me-2"
-                                                data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-primary"
-                                                [disabled]="taskForm.invalid">Add
-                                                Task</button>
-                                        </div>
-                                    </form>
+                                    </div>
+                                    <div *ngIf="taskForm.submitted && selectedMembers.length === 0" class="text-danger">
+                                        * Select at least one team member
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="status">Status</label>
+                                    <select id="status" name="taskStatus" class="form-control"
+                                        [(ngModel)]="currentTask.taskStatus" [value]="currentTask.taskStatus" required>
+                                        <option value="New">New</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Completed">Completed</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12 mb-3">
+                                    <label for="taskDescription">Description</label>
+                                    <textarea id="taskDescription" name="taskDescription" class="form-control" ngModel
+                                        required #taskDescription="ngModel"></textarea>
+                                    <div *ngIf="taskDescription.invalid && taskDescription.touched" class="text-danger">
+                                        * Task Description is required
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="estimate">Estimate (hours)</label>
+                                    <input type="number" id="estimate" name="taskEstimate" class="form-control" ngModel
+                                        required #taskEstimate="ngModel">
+                                    <div *ngIf="taskEstimate.invalid && taskEstimate.touched" class="text-danger">
+                                        * Estimate Greater than Time Spent
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="timeSpent">Time Spent (hours)</label>
+                                    <input type="number" id="timeSpent" name="timeSpent" class="form-control" ngModel
+                                        required #timeSpent="ngModel" [max]="taskEstimate?.value">
+                                    <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
+                                        * Time Spent less than Estimate
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="button" class="btn btn-secondary me-2"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">Add
+                                    Task</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <!-- edit task  -->
-            <div class="modal fade" *ngIf="!isEditingTask" id="editTaskModal" tabindex="-1"
-                aria-labelledby="editTaskModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <form (ngSubmit)="saveTask(taskForm)" #taskForm="ngForm">
-                                        <div class="row">
-                                            <!-- Task Title -->
-                                            <div class="col-md-4 mb-3">
-                                                <label for="taskTitle">Task Title</label>
-                                                <input type="text" id="taskTitle" name="taskTitle" class="form-control"
-                                                    [(ngModel)]="currentTask.title" required #taskTitle="ngModel">
-                                                <div *ngIf="taskTitle.invalid && taskTitle.touched" class="text-danger">
-                                                    * Task Title is required
-                                                </div>
-                                            </div>
-                                            <!-- Task Assigned To -->
-                                            <div class="col-md-4 mb-3">
-                                                <label class="">Task Assigned To</label>
-                                                <div class="input-group">
-                                                    <div class="dropdown w-100">
-                                                        <button
-                                                            class="btn dropdown-toggle border border-grey w-100 text-start"
-                                                            type="button" id="dropdownMenuButton"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            Select Team Members
-                                                        </button>
-                                                        <ul class="dropdown-menu w-100"
-                                                            aria-labelledby="dropdownMenuButton"
-                                                            style="padding: 10px; max-height: 200px; overflow-y: auto;">
-                                                            <li class="d-flex align-items-center"
-                                                                *ngFor="let member of teamMembers">
-                                                                <input type="checkbox" [id]="member" [value]="member"
-                                                                    name="assignedTo"
-                                                                    (change)="onTaskMemberChange($event)"
-                                                                    [checked]="selectedTaskMembers.includes(member)"
-                                                                    class="me-2">
-                                                                <label [for]="member">{{ member }}</label>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div *ngIf="taskForm.submitted && selectedTaskTeamMembers.length === 0"
-                                                    class="text-danger">
-                                                    * Select at least one team member
-                                                </div>
-                                            </div>
-                                            <!-- Task Status -->
-                                            <div class="col-md-4 mb-3">
-                                                <label for="taskStatus">Status</label>
-                                                <select id="taskStatus" name="taskStatus" class="form-control"
-                                                    [(ngModel)]="currentTask.taskStatus" required>
-                                                    <option value="New">New</option>
-                                                    <option value="In Progress">In Progress</option>
-                                                    <option value="Completed">Completed</option>
-                                                </select>
-                                            </div>
-                                            <!-- Task Description -->
-                                            <div class="col-md-12 mb-3">
-                                                <label for="taskDescription">Description</label>
-                                                <textarea id="taskDescription" name="taskDescription"
-                                                    class="form-control" [(ngModel)]="currentTask.description" required
-                                                    #taskDescription="ngModel"></textarea>
-                                                <div *ngIf="taskDescription.invalid && taskDescription.touched"
-                                                    class="text-danger">
-                                                    * Task Description is required
-                                                </div>
-                                            </div>
-                                            <!-- Task Estimate -->
-                                            <div class="col-md-6 mb-3">
-                                                <label for="taskEstimate">Estimate (hours)</label>
-                                                <input type="number" id="taskEstimate" name="taskEstimate"
-                                                    class="form-control" [(ngModel)]="currentTask.taskEstimate" required
-                                                    #taskEstimate="ngModel">
-                                                <div *ngIf="taskEstimate.invalid && taskEstimate.touched"
-                                                    class="text-danger">
-                                                    * Estimate is required
-                                                </div>
-                                            </div>
-                                            <!-- Time Spent -->
-                                            <div class="col-md-6 mb-3">
-                                                <label for="timeSpent">Time Spent (hours)</label>
-                                                <input type="number" id="timeSpent" name="timeSpent"
-                                                    class="form-control" [(ngModel)]="currentTask.timeSpent" required
-                                                    #timeSpent="ngModel" [max]="currentTask.taskEstimate">
-                                                <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
-                                                    * Time Spent must be less than or equal to Estimate
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <!-- Form Buttons -->
-                                        <div class="d-flex justify-content-end mt-3">
-                                            <button type="button" class="btn btn-secondary me-2"
-                                                data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-primary"
-                                                [disabled]="taskForm.invalid">Save
-                                                Changes</button>
-                                        </div>
-                                    </form>
+        </div>
+    </div>
+</div>
+<!-- edit task  -->
+<div class="modal fade" *ngIf="!isEditingTask" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form (ngSubmit)="saveTask(taskForm)" #taskForm="ngForm">
+                            <div class="row">
+                                <!-- Task Title -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="taskTitle">Task Title</label>
+                                    <input type="text" id="taskTitle" name="taskTitle" class="form-control"
+                                        [(ngModel)]="currentTask.title" required #taskTitle="ngModel">
+                                    <div *ngIf="taskTitle.invalid && taskTitle.touched" class="text-danger">
+                                        * Task Title is required
+                                    </div>
                                 </div>
+                                <!-- Task Assigned To -->
+                                <div class="col-md-4 mb-3">
+                                    <label class="">Task Assigned To</label>
+                                    <div class="input-group">
+                                        <div class="dropdown w-100">
+                                            <button class="btn dropdown-toggle border border-grey w-100 text-start"
+                                                type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Select Team Members
+                                            </button>
+                                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
+                                                style="padding: 10px; max-height: 200px; overflow-y: auto;">
+                                                <li class="d-flex align-items-center"
+                                                    *ngFor="let member of teamMembers">
+                                                    <input type="checkbox" [id]="member" [value]="member"
+                                                        name="assignedTo" (change)="onTaskMemberChange($event)"
+                                                        [checked]="selectedTaskMembers.includes(member)" class="me-2">
+                                                    <label [for]="member">{{ member }}</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="taskForm.invalid && selectedTaskMembers.length === 0"
+                                        class="text-danger">
+                                        * Select at least one team member
+                                    </div>
+                                </div>
+                                <!-- Task Status -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="taskStatus">Status</label>
+                                    <select id="taskStatus" name="taskStatus" class="form-control"
+                                        [(ngModel)]="currentTask.taskStatus" required>
+                                        <option value="New">New</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Completed">Completed</option>
+                                    </select>
+                                </div>
+                                <!-- Task Description -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="taskDescription">Description</label>
+                                    <textarea id="taskDescription" name="taskDescription" class="form-control"
+                                        [(ngModel)]="currentTask.description" required
+                                        #taskDescription="ngModel"></textarea>
+                                    <div *ngIf="taskDescription.invalid && taskDescription.touched" class="text-danger">
+                                        * Task Description is required
+                                    </div>
+                                </div>
+                                <!-- Task Estimate -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="taskEstimate">Estimate (hours)</label>
+                                    <input type="number" id="taskEstimate" name="taskEstimate" class="form-control"
+                                        [(ngModel)]="currentTask.taskEstimate" required #taskEstimate="ngModel">
+                                    <div *ngIf="taskEstimate.invalid && taskEstimate.touched" class="text-danger">
+                                        * Estimate is required
+                                    </div>
+                                </div>
+                                <!-- Time Spent -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="timeSpent">Time Spent (hours)</label>
+                                    <input type="number" id="timeSpent" name="timeSpent" class="form-control"
+                                        [(ngModel)]="currentTask.timeSpent" required #timeSpent="ngModel"
+                                        [max]="currentTask.taskEstimate">
+                                    <div *ngIf="timeSpent.invalid && timeSpent.touched" class="text-danger">
+                                        * Time Spent must be less than or equal to Estimate
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
+
+                            <!-- Form Buttons -->
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="button" class="btn btn-secondary me-2"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary"
+                                    [disabled]="taskForm.invalid || selectedTaskMembers.length === 0">Save
+                                    Changes</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-
-
-  
- </div>
-
+        </div>
+    </div>
+</div>

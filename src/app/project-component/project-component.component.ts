@@ -48,18 +48,6 @@ export class ProjectComponentComponent
   sortColumn: string = '';
   sortDirection: string = 'asc';
 
-  teamMembers: string[] = [
-    'Piyush',
-    'Ayush',
-    'Ganesh',
-    'Om',
-    'Harsh',
-    'Tejas',
-    'Kalyan',
-    'Rushi',
-    'Shubham',
-  ];
-
   project: any = {
     project_Id: '',
     title: '',
@@ -75,6 +63,24 @@ export class ProjectComponentComponent
     estimate: '',
     timeSpent: '',
   };
+
+  openCreateProjectModal() {
+    this.project = {
+      project_Id: '',
+      title: '',
+      description: '',
+      createdBy: this.userName,
+      projectManager: '',
+      startDate: '',
+      endDate: '',
+      teamMembers: [],
+      dueDate: '',
+      status: 'High',
+      assignedTo: '',
+      estimate: '',
+      timeSpent: '',
+    };
+  }
 
   constructor(
     private router: Router,
@@ -95,7 +101,6 @@ export class ProjectComponentComponent
     this.startLiveDaysRemaining();
   }
 
-
   getUserName() {
     const currentUser = this.apiService.getCurrentUser();
     if (currentUser && currentUser.user_name) {
@@ -108,8 +113,6 @@ export class ProjectComponentComponent
   loadProjects() {
     this.projects = this.apiService.getProjects();
     this.applyFilters();
-
-    
   }
 
   closeModal() {
@@ -340,13 +343,9 @@ export class ProjectComponentComponent
     const endIndex = startIndex + this.itemsPerPage;
     this.filteredProjects = filteredProjects.slice(startIndex, endIndex);
     // console.log('Filtered projects: ', this.filteredProjects);
-    
-    
   }
 
-
   confirmDelete(projectId: string) {
-
     if (confirm('Are you sure ?')) {
       this.apiService.deleteProject(projectId);
       this.loadProjects();
@@ -354,33 +353,29 @@ export class ProjectComponentComponent
     }
   }
 
-  
   editedProject: any = {};
 
-
-
-
   editProject(projectID: string) {
-    console.log(projectID)
+    console.log(projectID);
     this.project = this.apiService.getProjectById(projectID);
     this.editedProject = { ...this.project };
 
     if (this.editedProject.startDate && this.editedProject.endDate) {
       const startDate = new Date(this.editedProject.startDate);
       const endDate = new Date(this.editedProject.endDate);
-      this.calculateDueInDays(startDate, endDate); // Reuse the existing method
+      this.calculateDueInDays(startDate, endDate);
     }
-    
-    this.loadProjects();
 
+    this.loadProjects();
   }
 
-  
-  saveProject(){
-    this.apiService.updateProject(this.editedProject.project_Id, this.editedProject);
+  saveProject() {
+    this.apiService.updateProject(
+      this.editedProject.project_Id,
+      this.editedProject
+    );
     this.loadProjects();
     this.toastr.success('Project updated successfully!');
     this.closeeditModal();
   }
-
 }

@@ -22,7 +22,7 @@ export class TaskComponentComponent implements OnInit {
   tasks: any[] = [];
   userName: string = '';
   isEditing: boolean = false;
-  isCreateTask : boolean = false;
+  isCreateTask: boolean = false;
   editedProject: any = {};
 
   filteredTasks: any[] = [];
@@ -129,8 +129,8 @@ export class TaskComponentComponent implements OnInit {
   selectedMembers: string[] = []; // Unified array for selected team members
 
   closeTaskModal() {
-    this.selectedMembers = []; 
-    this.currentTask = {}; 
+    this.selectedMembers = [];
+    this.currentTask = {};
     const modalEl = document.getElementById('taskModal');
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
     if (modalInstance) {
@@ -144,7 +144,6 @@ export class TaskComponentComponent implements OnInit {
       modalInstance.hide();
     }
   }
-  
 
   addTask(taskForm: any) {
     const task = {
@@ -176,7 +175,7 @@ export class TaskComponentComponent implements OnInit {
     const updatedTask = {
       task_id: this.currentTask.task_id,
       title: taskForm.value.taskTitle,
-      assignedTo: [...this.selectedMembers],
+      assignedTo: [...this.selectedTaskMembers],
       taskStatus: taskForm.value.taskStatus,
       taskEstimate: taskForm.value.taskEstimate,
       timeSpent: taskForm.value.timeSpent,
@@ -190,11 +189,27 @@ export class TaskComponentComponent implements OnInit {
     this.toastr.success('Task updated successfully!');
   }
 
-  cancelEditTask() {
-    // this.isEditingTask = false;
-    this.currentTask = {};
-    this.selectedTaskTeamMembers = [];
+  onTaskMemberChange(event: any) {
+    const member = event.target.value;
+    if (event.target.checked) {
+      if (!this.selectedTaskMembers.includes(member)) {
+        this.selectedTaskMembers.push(member);
+      }
+    } else {
+      const index = this.selectedTaskMembers.indexOf(member);
+      if (index > -1) {
+        this.selectedTaskMembers.splice(index, 1);
+      }
+    }
+    this.selectedMembers = [...this.selectedTaskMembers];
+    console.log('Updated Selected Task Members:', this.selectedTaskMembers);
   }
+
+  // cancelEditTask() {
+  // this.isEditingTask = false;
+  // this.currentTask = {};
+  // this.selectedTaskTeamMembers = [];
+  // }
   editTask(task: any) {
     // this.isEditingTask = true;
     this.currentTask = { ...task };
@@ -221,21 +236,6 @@ export class TaskComponentComponent implements OnInit {
         this.editedProject.teamMembers.splice(index, 1);
       }
     }
-  }
-
-  onTaskMemberChange(event: any) {
-    const member = event.target.value;
-    if (event.target.checked) {
-      if (!this.selectedMembers.includes(member)) {
-        this.selectedMembers.push(member);
-      }
-    } else {
-      const index = this.selectedMembers.indexOf(member);
-      if (index > -1) {
-        this.selectedMembers.splice(index, 1);
-      }
-    }
-    console.log('Updated Selected Task Members:', this.selectedMembers);
   }
 
   // date
